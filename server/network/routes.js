@@ -1,5 +1,9 @@
 import { config } from 'dotenv';
-import { userRouter, addressRouter } from '../components/index.js';
+import {
+  userRouter,
+  addressRouter,
+  publicAddressRouter,
+} from '../components/index.js';
 
 config();
 
@@ -11,4 +15,8 @@ export const userRoutes = (app) => {
 
 export const addressRoutes = (app) => {
   app.use(`${apiVersion}/addresses`, addressRouter);
+};
+
+export const publicAddressRoutes = (app) => {
+  app.use(`${apiVersion}/short`, publicAddressRouter);
 };

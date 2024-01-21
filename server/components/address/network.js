@@ -1,5 +1,5 @@
 import express from 'express';
-import { getData, createAddress } from './controller.js';
+import { getData, createAddress, goToAddress } from './controller.js';
 import { success, error } from '../../network/response.js';
 
 export const addressRouter = express.Router();
@@ -24,5 +24,18 @@ addressRouter.post('/', (req, res) => {
     })
     .catch((err) => {
       return error(req, res, 500, 'Error creating URL', err);
+    });
+});
+
+// PUBLIC ADDRESS ROUTER (/short/)
+export const publicAddressRouter = express.Router();
+
+publicAddressRouter.get('/:urlCode', (req, res) => {
+  goToAddress(req.params.urlCode)
+    .then((userData) => {
+      return res.status(301).redirect(userData.originalLink);
+    })
+    .catch((err) => {
+      return error(req, res, 500, 'Error obtaining URL, try again', err);
     });
 });

@@ -1,5 +1,5 @@
 import Address from '../../models/Address.js';
-import { getAllAddresses } from './store.js';
+import { getAllAddresses, findAddressBy } from './store.js';
 import { customError } from '../../network/response.js';
 
 export const getData = () => {
@@ -39,6 +39,25 @@ export const createAddress = (
       });
 
       resolve(address);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+export const goToAddress = (urlCode) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dbAddress = await findAddressBy('urlCode', urlCode, true);
+
+      if (!dbAddress || dbAddress.length === 0) {
+        reject(customError(404, 'URL not exists'));
+      }
+
+      dbAddress.visitCount = dbAddress.visitCount + 1;
+      await dbAddress.save(dbAddress);
+
+      resolve(dbAddress);
     } catch (err) {
       reject(err);
     }

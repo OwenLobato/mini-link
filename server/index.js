@@ -2,7 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import { config } from 'dotenv';
 import { connectDB } from './config/mongo.js';
-import { userRoutes, addressRoutes } from './network/routes.js';
+import {
+  userRoutes,
+  addressRoutes,
+  publicAddressRoutes,
+} from './network/routes.js';
 
 config();
 connectDB();
@@ -20,6 +24,7 @@ app.use(express.json());
 // ROUTES
 userRoutes(app);
 addressRoutes(app);
+publicAddressRoutes(app);
 
 const server = app.listen(port, () =>
   console.log(`Server running on port ${port}`)

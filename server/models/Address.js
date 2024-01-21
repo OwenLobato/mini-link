@@ -5,7 +5,6 @@ const addressSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Please provide the name'],
-      unique: true,
     },
     urlCode: {
       type: String,
@@ -15,7 +14,6 @@ const addressSchema = new mongoose.Schema(
     originalLink: {
       type: String,
       required: [true, 'Please provide the original link'],
-      unique: true,
     },
     description: {
       type: String,
