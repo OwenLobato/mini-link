@@ -1,5 +1,6 @@
 import Address from '../../models/Address.js';
 import { getAllAddresses, findAddressBy } from './store.js';
+import { objectIdConversor } from '../helpers/dbConverters.js';
 import { customError } from '../../network/response.js';
 
 export const getData = () => {
@@ -43,6 +44,33 @@ export const createAddress = (
       reject(err);
     }
   });
+};
+
+export const getAddressByKey = (key, value, createdBy) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const dbAddress =
+        key && value
+          ? await findAddressBy(key, value)
+          : await findAddressBy('createdBy', createdBy);
+
+      if (!dbAddress) {
+        reject(customError(401, 'URL not found'));
+      }
+
+      resolve(getUserAddresses(createdBy, dbAddress));
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const getUserAddresses = (userId, addresses) => {
+  return addresses.filter(
+    (address) =>
+      objectIdConversor(userId).toString() ===
+      objectIdConversor(address.createdBy).toString()
+  );
 };
 
 export const goToAddress = (urlCode) => {
