@@ -1,10 +1,10 @@
 import { getAllUsers } from './store.js';
 import { customError } from '../../network/response.js';
 
-export const getData = (userId) => {
+export const getData = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      const dbUser = await getAllUsers('_id', userId);
+      const dbUser = await getAllUsers();
       if (!dbUser) {
         reject(customError(401, 'Users not found'));
       }
