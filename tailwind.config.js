@@ -11,6 +11,7 @@ module.exports = {
         'light-alert': '#FF0000', // Red
         'light-bg-secondary': '#7597B6', // Air Superiority Blue
         'light-hover': '#DCEBFF', // Alice Blue
+        'light-btn-hover': '#005EB8', // Denim
       },
     },
   },
