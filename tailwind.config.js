@@ -7,7 +7,7 @@ module.exports = {
         'light-bg-main': '#CCEDFF', // Columbia Blue
         'light-text-main': '#004AAD', // Cobalt Blue
         'light-text-secondary': '#00C4CC', // Robin Egg Blue
-        'light-text-muted ': '#C1C1C1', // Silver
+        'light-text-third': '#C1C1C1', // Silver
         'light-alert': '#FF0000', // Red
         'light-bg-secondary': '#7597B6', // Air Superiority Blue
         'light-hover': '#DCEBFF', // Alice Blue
