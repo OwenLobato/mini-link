@@ -1,0 +1,74 @@
+import PropTypes from 'prop-types';
+import { useState } from 'react';
+
+export const Input = ({
+  id,
+  type = 'text',
+  label,
+  onChange = () => {},
+  placeholder,
+  className,
+  ...restProps
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const [isEmpty, setIsEmpty] = useState(
+    !(restProps?.value || restProps?.defaultValue)
+  );
+
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = (e) => {
+    setIsFocused(false);
+    if (!e.target.value) {
+      setIsEmpty(true);
+    }
+  };
+
+  const handleChange = (e) => {
+    if (e.target.value) {
+      setIsEmpty(false);
+    }
+    onChange(e);
+  };
+
+  return (
+    <div className={`relative ${className}`}>
+      <label
+        htmlFor={id}
+        className={`absolute left-3 transition-all duration-300
+        ${
+          isFocused || !isEmpty
+            ? '-top-2 text-xs bg-white px-1'
+            : 'top-1/2 -translate-y-1/2'
+        }
+        ${isFocused ? 'text-light-text-main' : 'text-light-text-third'}
+          `}
+      >
+        {label}
+      </label>
+      <input
+        id={id}
+        type={type}
+        className={`w-full border rounded-md py-2 px-3 focus:outline-none focus:border-light-text-main text-black ${
+          isFocused && 'border-light-text-main'
+        }`}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        placeholder={isFocused ? placeholder : ''}
+        {...restProps}
+      />
+    </div>
+  );
+};
+
+Input.propTypes = {
+  id: PropTypes.string,
+  type: PropTypes.string,
+  label: PropTypes.string,
+  onChange: PropTypes.func,
+  placeholder: PropTypes.string,
+  className: PropTypes.string,
+};
