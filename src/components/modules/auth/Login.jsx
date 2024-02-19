@@ -61,9 +61,7 @@ export const Login = () => {
             placeholder={'Type your email address'}
             onChange={handleLoginData}
             value={loginData.email}
-            startAdornment={
-              <i className='fa-solid fa-envelope text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-envelope' />}
             className='mb-6 w-full'
           />
           <Input
@@ -73,14 +71,12 @@ export const Login = () => {
             placeholder='Type your password'
             onChange={handleLoginData}
             value={loginData.password}
-            startAdornment={
-              <i className='fa-solid fa-lock text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-lock' />}
             finishAdornment={
               <i
                 className={`fa-solid fa-eye${
                   passwordType === 'text' ? '-slash' : ''
-                } text-light-text-third hover:cursor-pointer`}
+                } hover:cursor-pointer`}
                 onClick={handleShowPassword}
               />
             }

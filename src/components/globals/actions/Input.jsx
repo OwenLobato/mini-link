@@ -56,7 +56,11 @@ export const Input = ({
       </label>
       <div className='relative w-full'>
         {startAdornment && (
-          <div className='absolute inset-y-0 left-0 pl-3 flex items-center'>
+          <div
+            className={`absolute inset-y-0 left-0 pl-3 flex items-center ${
+              isFocused ? 'text-light-text-main' : 'text-light-text-third'
+            }`}
+          >
             {startAdornment}
           </div>
         )}
@@ -77,7 +81,11 @@ export const Input = ({
           {...restProps}
         />
         {finishAdornment && (
-          <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
+          <div
+            className={`absolute inset-y-0 right-0 pr-3 flex items-center ${
+              isFocused ? 'text-light-text-main' : 'text-light-text-third'
+            }`}
+          >
             {finishAdornment}
           </div>
         )}

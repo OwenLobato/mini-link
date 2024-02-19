@@ -71,9 +71,7 @@ export const Register = () => {
             placeholder={'Type your name'}
             onChange={handleRegisterData}
             value={registerData.name}
-            startAdornment={
-              <i className='fa-solid fa-user text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-user' />}
             className='mb-6 w-full'
           />
           <Input
@@ -83,9 +81,7 @@ export const Register = () => {
             placeholder={'Type your email address'}
             onChange={handleRegisterData}
             value={registerData.email}
-            startAdornment={
-              <i className='fa-solid fa-envelope text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-envelope' />}
             className='mb-6 w-full'
           />
           <Input
@@ -95,14 +91,12 @@ export const Register = () => {
             placeholder='Type your password'
             onChange={handleRegisterData}
             value={registerData.password}
-            startAdornment={
-              <i className='fa-solid fa-lock text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-lock' />}
             finishAdornment={
               <i
                 className={`fa-solid fa-eye${
                   passwordType === 'text' ? '-slash' : ''
-                } text-light-text-third hover:cursor-pointer`}
+                } hover:cursor-pointer`}
                 onClick={handleShowPassword}
               />
             }
@@ -115,9 +109,7 @@ export const Register = () => {
             placeholder='Type your password'
             onChange={handleRegisterData}
             value={registerData.confirmPassword}
-            startAdornment={
-              <i className='fa-solid fa-lock text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-lock' />}
             className='mb-4 w-full'
           />
           <Button text={'Register'} type='submit' className='mb-2 w-1/3' />

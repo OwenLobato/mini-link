@@ -73,9 +73,7 @@ export const Profile = () => {
             placeholder={'Type your name'}
             onChange={handleProfileData}
             value={profileData.name}
-            startAdornment={
-              <i className='fa-solid fa-user text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-user' />}
             className='w-full'
           />
           <Input
@@ -85,9 +83,7 @@ export const Profile = () => {
             placeholder={'Type your email address'}
             onChange={handleProfileData}
             value={profileData.email}
-            startAdornment={
-              <i className='fa-solid fa-envelope text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-envelope' />}
             className='w-full'
           />
           <Input
@@ -97,14 +93,12 @@ export const Profile = () => {
             placeholder='Type your password'
             onChange={handleProfileData}
             value={profileData.password}
-            startAdornment={
-              <i className='fa-solid fa-lock text-light-text-third' />
-            }
+            startAdornment={<i className='fa-solid fa-lock' />}
             finishAdornment={
               <i
                 className={`fa-solid fa-eye${
                   passwordType === 'text' ? '-slash' : ''
-                } text-light-text-third hover:cursor-pointer`}
+                } hover:cursor-pointer`}
                 onClick={handleShowPassword}
               />
             }
