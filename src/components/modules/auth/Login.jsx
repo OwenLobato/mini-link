@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Input } from '../../globals';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
+  const navigate = useNavigate();
+
   const initialLoginData = {
     email: '',
     password: '',
@@ -18,10 +21,24 @@ export const Login = () => {
     setLoginData({ ...loginData, [id]: value });
   };
 
+  const validateForm = () => {
+    const isEmpty = Object.values(loginData).some((value) => value === '');
+    if (isEmpty) {
+      // TODO: Add modal
+      alert('Please fill all fields');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Email:', loginData.email);
-    console.log('Password:', loginData.password);
+    if (validateForm()) {
+      console.log('loginData:', loginData);
+      // TODO: Make API request
+      window.localStorage.setItem('authToken', loginData.password);
+      navigate('/dashboard');
+    }
   };
 
   return (
