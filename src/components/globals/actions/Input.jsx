@@ -7,6 +7,8 @@ export const Input = ({
   label,
   onChange = () => {},
   placeholder,
+  startAdornment,
+  finishAdornment,
   className,
   ...restProps
 }) => {
@@ -34,13 +36,17 @@ export const Input = ({
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative ${className} `}>
       <label
         htmlFor={id}
-        className={`absolute left-3 transition-all duration-300
+        className={`absolute left-${
+          startAdornment ? '10' : '3'
+        } transition-all duration-300 z-10
         ${
           isFocused || !isEmpty
-            ? '-top-2 text-xs bg-white px-1'
+            ? `-top-2 text-xs bg-white px-1 ${
+                startAdornment && '-translate-x-7'
+              }`
             : 'top-1/2 -translate-y-1/2'
         }
         ${isFocused ? 'text-light-text-main' : 'text-light-text-third'}
@@ -48,18 +54,34 @@ export const Input = ({
       >
         {label}
       </label>
-      <input
-        id={id}
-        type={type}
-        className={`w-full border rounded-md py-2 px-3 focus:outline-none focus:border-light-text-main text-black ${
-          isFocused && 'border-light-text-main'
-        }`}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        placeholder={isFocused ? placeholder : ''}
-        {...restProps}
-      />
+      <div className='relative w-full'>
+        {startAdornment && (
+          <div className='absolute inset-y-0 left-0 pl-3 flex items-center'>
+            {startAdornment}
+          </div>
+        )}
+        <input
+          id={id}
+          type={type}
+          className={`w-full border rounded-md py-2 px-3 pl-${
+            startAdornment ? '10' : '3'
+          } pr-${
+            finishAdornment ? '10' : '3'
+          } focus:outline-none focus:border-light-text-main text-black ${
+            isFocused && 'border-light-text-main'
+          }`}
+          onChange={handleChange}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
+          placeholder={isFocused ? placeholder : ''}
+          {...restProps}
+        />
+        {finishAdornment && (
+          <div className='absolute inset-y-0 right-0 pr-3 flex items-center'>
+            {finishAdornment}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -71,4 +93,6 @@ Input.propTypes = {
   onChange: PropTypes.func,
   placeholder: PropTypes.string,
   className: PropTypes.string,
+  startAdornment: PropTypes.node,
+  finishAdornment: PropTypes.node,
 };
