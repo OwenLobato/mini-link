@@ -8,6 +8,7 @@ export const Button = ({
   onClick = () => {},
   className,
   disabled = false,
+  alwaysShowText = false,
   ...restProps
 }) => {
   const buttonClass = `${className} flex justify-center items-center py-2 px-4 rounded transition duration-300 ease-in-out`;
@@ -37,7 +38,11 @@ export const Button = ({
       {icon ? (
         <span className='flex gap-2'>
           <span>{icon}</span>
-          {text && <span className='hidden md:inline'>{text}</span>}
+          {text && (
+            <span className={`${alwaysShowText ? '' : 'hidden'} md:inline`}>
+              {text}
+            </span>
+          )}
         </span>
       ) : (
         text && <span>{text}</span>
@@ -54,4 +59,5 @@ Button.propTypes = {
   onClick: PropTypes.func,
   className: PropTypes.string,
   disabled: PropTypes.bool,
+  alwaysShowText: PropTypes.bool,
 };
