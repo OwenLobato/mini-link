@@ -9,7 +9,7 @@ export const Button = ({
   disabled = false,
   ...restProps
 }) => {
-  const buttonClass = `${className} flex items-center py-2 px-4 rounded transition duration-300 ease-in-out`;
+  const buttonClass = `${className} flex justify-center items-center py-2 px-4 rounded transition duration-300 ease-in-out`;
 
   const defaultStyle = 'bg-light-text-main hover:bg-light-btn-hover text-white';
   const disabledStyle = 'bg-light-text-third text-white cursor-not-allowed';
