@@ -3,6 +3,7 @@ import cors from 'cors';
 import { config } from 'dotenv';
 import { connectDB } from './config/mongo.js';
 import {
+  authRoutes,
   userRoutes,
   addressRoutes,
   publicAddressRoutes,
@@ -22,6 +23,7 @@ app.use(cors({ credentials: true, origin: ORIGIN_PATH }));
 app.use(express.json());
 
 // ROUTES
+authRoutes(app);
 userRoutes(app);
 addressRoutes(app);
 publicAddressRoutes(app);
