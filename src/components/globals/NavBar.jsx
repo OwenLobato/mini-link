@@ -45,7 +45,7 @@ export const NavBar = () => {
   return (
     <nav className='absolute w-full bg-light-bg-main max-w-screen flex flex-wrap items-center justify-between p-2 mb-7 z-40'>
       <Link to='/dashboard' className='flex items-center'>
-        <img src={'assests/images/Logo.png'} className='h-8 mr-3' alt='Logo' />
+        <img src={'/assests/images/Logo.png'} className='h-8 mr-3' alt='Logo' />
       </Link>
       <button
         onClick={toggleMobileMenu}

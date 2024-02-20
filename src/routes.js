@@ -17,4 +17,5 @@ export const AppRoutes = [
   { path: '/dashboard', component: <Dashboard /> },
   { path: '/profile', component: <Profile /> },
   { path: '/link', component: <SaveLink /> },
+  { path: '/link/:id', component: <SaveLink isEditMode /> },
 ];

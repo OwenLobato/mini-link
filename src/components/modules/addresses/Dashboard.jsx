@@ -29,9 +29,7 @@ export const Dashboard = () => {
     // TODO: Make API request to get the links
     const cardsDataTest = [
       {
-        _id: {
-          $oid: '65acd97b708af1269f0a1c0a',
-        },
+        _id: '65acd97b708af1269f0a1c0a',
         name: 'Video 1',
         urlCode: 'aaaaaaaa',
         originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',
@@ -45,9 +43,7 @@ export const Dashboard = () => {
         __v: 0,
       },
       {
-        _id: {
-          $oid: '65acd997708af1269f0a1c0e',
-        },
+        _id: '65acd997708af1269f0a1c0e',
         name: 'Video 2',
         urlCode: 'bbbbbbbb',
         originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',
@@ -61,9 +57,7 @@ export const Dashboard = () => {
         __v: 0,
       },
       {
-        _id: {
-          $oid: '65acda5f708af1269f0a1c14',
-        },
+        _id: '65acda5f708af1269f0a1c14',
         name: 'Video 1',
         urlCode: 'cccccccc',
         originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',

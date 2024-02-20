@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Modal, Button } from '../../globals';
 
 export const LinkCard = ({ data }) => {
@@ -10,6 +11,8 @@ export const LinkCard = ({ data }) => {
     originalLink,
     description = 'No description',
   } = data;
+
+  const navigate = useNavigate();
 
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
@@ -38,6 +41,18 @@ export const LinkCard = ({ data }) => {
 
   const handleCopy = () => {
     window.navigator.clipboard.writeText(`http://domain/short/${urlCode}`);
+  };
+
+  const handleQrCode = () => {
+    console.log('Create QR Code...');
+  };
+
+  const handleEdit = () => {
+    navigate(`/link/${data._id}`, { state: data });
+  };
+
+  const handleDelete = () => {
+    console.log('Delete link...');
   };
 
   return (
@@ -83,27 +98,21 @@ export const LinkCard = ({ data }) => {
             alwaysShowText
             text={'QR Code'}
             icon={<i className='fa-solid fa-qrcode' />}
-            onClick={() => {
-              console.log('Create QR Code...');
-            }}
+            onClick={handleQrCode}
           />
           <Button
             alwaysShowText
             variant='outlined'
             text={'Edit'}
             icon={<i className='fa-solid fa-pen' />}
-            onClick={() => {
-              console.log('Edit link...');
-            }}
+            onClick={handleEdit}
           />
           <Button
             alwaysShowText
             variant='outlined'
             text={'Delete'}
             icon={<i className='fa-solid fa-trash' />}
-            onClick={() => {
-              console.log('Delete link...');
-            }}
+            onClick={handleDelete}
             className={'border-light-alert text-light-alert hover:bg-red-50'}
           />
         </div>

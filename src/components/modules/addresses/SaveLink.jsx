@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Button, Input, Modal } from '../../globals';
 
-export const SaveLink = () => {
+export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
+  const { state } = useLocation(); // TODO: Change state for an API call getLink(id) or something like that here
+  const { id } = useParams();
 
   const initialLinkData = {
     name: '',
@@ -53,11 +55,19 @@ export const SaveLink = () => {
     navigate('/dashboard');
   };
 
+  useEffect(() => {
+    if (isEditMode) {
+      // TODO: Make API request getLink(id)
+      console.log(id);
+      setLinkData(state);
+    }
+  }, []);
+
   return (
     <>
       <div className='w-full flex flex-col justify-start items-center '>
         <h1 className='text-3xl font-bold text-light-text-main mt-6 mb-10'>
-          Create mini link
+          {isEditMode ? 'Edit' : 'Create'} mini link
         </h1>
 
         <div className='w-11/12 flex justify-center items-center'>
@@ -102,7 +112,7 @@ export const SaveLink = () => {
               <Button
                 variant='outlined'
                 type='submit'
-                text='Generate short link'
+                text={`${isEditMode ? 'Save' : 'Generate'} mini link`}
               />
               <Button
                 variant='outlined'
@@ -120,13 +130,14 @@ export const SaveLink = () => {
       <Modal isOpen={isOptionsOpen} onClose={closeOptions}>
         <div className='flex flex-col items-center justify-center'>
           <h2 className='text-xl text-center font-bold text-light-text-main mb-4'>
-            Your mini link has been generated correctly
+            Your mini link has been {isEditMode ? 'modified' : 'generated'}{' '}
+            correctly
           </h2>
 
           {/* TODO: Generate real QR code */}
           <img
-            src='assests/svgs/qrCode.svg'
-            alt='Empty data'
+            src='/assests/svgs/qrCode.svg'
+            alt='Qr code'
             className='w-72 mb-6'
           />
 
