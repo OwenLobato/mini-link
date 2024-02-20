@@ -36,6 +36,10 @@ export const LinkCard = ({ data }) => {
     setIsOptionsOpen(false);
   };
 
+  const handleCopy = () => {
+    window.navigator.clipboard.writeText(`http://domain/short/${urlCode}`);
+  };
+
   return (
     <>
       <div
@@ -73,9 +77,7 @@ export const LinkCard = ({ data }) => {
             alwaysShowText
             text={'Copy'}
             icon={<i className='fa-solid fa-copy' />}
-            onClick={() => {
-              console.log('Copy mini link...');
-            }}
+            onClick={handleCopy}
           />
           <Button
             alwaysShowText
