@@ -52,7 +52,7 @@ export const LinkCard = ({ data }) => {
           <div className='flex flex-col items-end text-sm gap-2 w-1/4'>
             <span className='flex justify-center items-center gap-1'>
               <i className='fa-regular fa-calendar text-light-text-main' />
-              <p>{getFormattedDate(createdAt)}</p>
+              <p className='text-nowrap'>{getFormattedDate(createdAt)}</p>
             </span>
 
             <span className='flex justify-center items-center gap-1'>
