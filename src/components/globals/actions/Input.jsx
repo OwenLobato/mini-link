@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const Input = ({
   id,
@@ -34,6 +34,10 @@ export const Input = ({
     }
     onChange(e);
   };
+
+  useEffect(() => {
+    setIsEmpty(!(restProps?.value || restProps?.defaultValue));
+  }, [restProps?.value, restProps?.defaultValue]);
 
   return (
     <div className={`relative ${className} `}>
