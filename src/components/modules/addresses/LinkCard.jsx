@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import QRCode from 'react-qr-code';
 import { Modal, Button } from '../../globals';
 
 export const LinkCard = ({ data }) => {
@@ -189,8 +190,7 @@ const DeleteModal = ({ cancel, deleteLink }) => {
 const QrModal = ({ urlCode }) => {
   return (
     <div className='flex flex-col items-center justify-center'>
-      {/* TODO: Generate real QR code */}
-      <img src='/assests/svgs/qrCode.svg' alt='Qr code' className='w-72' />
+      <QRCode value='http://domain/short/{urlCode}' className='m-4' />
 
       <p className='text-center font-bold text-light-text-main mb-4'>
         http://domain/short/{urlCode}

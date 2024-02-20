@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import QRCode from 'react-qr-code';
 import { Button, Input, Modal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
@@ -134,11 +135,9 @@ export const SaveLink = ({ isEditMode = false }) => {
             correctly
           </h2>
 
-          {/* TODO: Generate real QR code */}
-          <img
-            src='/assests/svgs/qrCode.svg'
-            alt='Qr code'
-            className='w-72 mb-6'
+          <QRCode
+            value={`http://domain/short/${linkData?.urlCode}`}
+            className='m-4'
           />
 
           <p className='text-center font-bold text-light-text-main mb-4'>
