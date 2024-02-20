@@ -46,7 +46,7 @@ export const LinkCard = ({ data }) => {
 
   const handleQrCode = () => {
     console.log('Create QR Code...');
-    closeModal();
+    openModal(<QrModal urlCode={urlCode} />);
   };
 
   const handleEdit = () => {
@@ -182,6 +182,30 @@ const DeleteModal = ({ cancel, deleteLink }) => {
           className={'border-light-alert text-light-alert hover:bg-red-50'}
         />
       </div>
+    </div>
+  );
+};
+
+const QrModal = ({ urlCode }) => {
+  return (
+    <div className='flex flex-col items-center justify-center'>
+      {/* TODO: Generate real QR code */}
+      <img src='/assests/svgs/qrCode.svg' alt='Qr code' className='w-72' />
+
+      <p className='text-center font-bold text-light-text-main mb-4'>
+        http://domain/short/{urlCode}
+      </p>
+
+      <Button
+        alwaysShowText
+        text={'Copy mini link'}
+        icon={<i className='fa-regular fa-copy' />}
+        onClick={() => {
+          window.navigator.clipboard.writeText(
+            `http://domain/short/${urlCode}`
+          );
+        }}
+      />
     </div>
   );
 };
