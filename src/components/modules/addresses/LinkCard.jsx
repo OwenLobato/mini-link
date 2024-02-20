@@ -14,7 +14,7 @@ export const LinkCard = ({ data }) => {
 
   const navigate = useNavigate();
 
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
   const isValidDate = (dateString) => {
     const date = new Date(dateString);
@@ -31,34 +31,64 @@ export const LinkCard = ({ data }) => {
     return `${day}/${month}/${year}`;
   };
 
-  const openOptions = () => {
-    setIsOptionsOpen(true);
+  const openModal = (content) => {
+    setModalContent(content);
   };
 
-  const closeOptions = () => {
-    setIsOptionsOpen(false);
+  const closeModal = () => {
+    setModalContent(null);
   };
 
   const handleCopy = () => {
     window.navigator.clipboard.writeText(`http://domain/short/${urlCode}`);
+    closeModal();
   };
 
   const handleQrCode = () => {
     console.log('Create QR Code...');
+    closeModal();
   };
 
   const handleEdit = () => {
     navigate(`/link/${data._id}`, { state: data });
   };
 
-  const handleDelete = () => {
+  const handleDeleteLink = () => {
     console.log('Delete link...');
+    closeModal();
+  };
+
+  const handleDelete = () => {
+    openModal(
+      <DeleteModal
+        cancel={() => {
+          openModal(
+            <OptionsModal
+              handleCopy={handleCopy}
+              handleQrCode={handleQrCode}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          );
+        }}
+        deleteLink={handleDeleteLink}
+      />
+    );
   };
 
   return (
     <>
       <div
-        onClick={openOptions}
+        onClick={() =>
+          openModal(
+            <OptionsModal
+              handleCopy={handleCopy}
+              handleQrCode={handleQrCode}
+              handleEdit={handleEdit}
+              handleDelete={handleDelete}
+            />
+          )
+        }
         className='bg-white shadow-md rounded-lg p-2 border border-gray-200 hover:bg-light-hover'
       >
         <div className='flex'>
@@ -83,40 +113,75 @@ export const LinkCard = ({ data }) => {
         <p className='text-sm text-gray-500 mb-2 text-justify'>{description}</p>
       </div>
 
-      <Modal isOpen={isOptionsOpen} onClose={closeOptions}>
-        <h2 className='text-2xl text-center font-bold text-light-text-main mb-4'>
-          Options
-        </h2>
-        <div className='flex flex-col justify-center gap-2'>
-          <Button
-            alwaysShowText
-            text={'Copy'}
-            icon={<i className='fa-solid fa-copy' />}
-            onClick={handleCopy}
-          />
-          <Button
-            alwaysShowText
-            text={'QR Code'}
-            icon={<i className='fa-solid fa-qrcode' />}
-            onClick={handleQrCode}
-          />
-          <Button
-            alwaysShowText
-            variant='outlined'
-            text={'Edit'}
-            icon={<i className='fa-solid fa-pen' />}
-            onClick={handleEdit}
-          />
-          <Button
-            alwaysShowText
-            variant='outlined'
-            text={'Delete'}
-            icon={<i className='fa-solid fa-trash' />}
-            onClick={handleDelete}
-            className={'border-light-alert text-light-alert hover:bg-red-50'}
-          />
-        </div>
+      <Modal isOpen={modalContent !== null} onClose={closeModal}>
+        {modalContent}
       </Modal>
     </>
+  );
+};
+
+const OptionsModal = ({
+  handleCopy,
+  handleQrCode,
+  handleEdit,
+  handleDelete,
+}) => {
+  return (
+    <>
+      <h2 className='text-2xl text-center font-bold text-light-text-main mb-4'>
+        Options
+      </h2>
+      <div className='flex flex-col justify-center gap-2'>
+        <Button
+          alwaysShowText
+          text={'Copy'}
+          icon={<i className='fa-solid fa-copy' />}
+          onClick={handleCopy}
+        />
+        <Button
+          alwaysShowText
+          text={'QR Code'}
+          icon={<i className='fa-solid fa-qrcode' />}
+          onClick={handleQrCode}
+        />
+        <Button
+          alwaysShowText
+          variant='outlined'
+          text={'Edit'}
+          icon={<i className='fa-solid fa-pen' />}
+          onClick={handleEdit}
+        />
+        <Button
+          alwaysShowText
+          variant='outlined'
+          text={'Delete'}
+          icon={<i className='fa-solid fa-trash' />}
+          onClick={handleDelete}
+          className={'border-light-alert text-light-alert hover:bg-red-50'}
+        />
+      </div>
+    </>
+  );
+};
+
+const DeleteModal = ({ cancel, deleteLink }) => {
+  return (
+    <div className='flex flex-col items-center'>
+      <h2 className='text-2xl text-center font-bold mb-4 w-4/5'>
+        Are you sure you want to delete it?
+      </h2>
+      <p className='mb-5  text-gray-700'>
+        This action is irreversible, confirm your decision below
+      </p>
+      <div className='flex justify-center gap-2'>
+        <Button variant='outlined' text={'No, cancel'} onClick={cancel} />
+        <Button
+          variant='outlined'
+          text={'Yes, delete'}
+          onClick={deleteLink}
+          className={'border-light-alert text-light-alert hover:bg-red-50'}
+        />
+      </div>
+    </div>
   );
 };
