@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Input } from '../../globals';
 import { useNavigate } from 'react-router-dom';
+import { Button, Input } from '../../globals';
+import useAuth from '../../../hooks/useAuth';
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const initialLoginData = {
     email: '',
@@ -34,10 +36,17 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('loginData:', loginData);
-      // TODO: Make API request
-      window.localStorage.setItem('authToken', loginData.password);
-      navigate('/dashboard');
+      const { email, password } = loginData;
+
+      login(email, password)
+        .then((res) => {
+          localStorage.setItem('authToken', res.data.data.token);
+          setLoginData(initialLoginData);
+          navigate('/dashboard');
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   };
 

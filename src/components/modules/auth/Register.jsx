@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import useAuth from '../../../hooks/useAuth';
 import { Button, Input } from '../../globals';
 import { useNavigate } from 'react-router-dom';
 
 export const Register = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const initialRegisterData = {
     name: '',
@@ -45,9 +47,18 @@ export const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm() && checkPassword()) {
-      console.log('registerData:', registerData);
-      // TODO: Make API request
-      navigate('/');
+      const { name, email, password } = registerData;
+
+      register(name, email, password)
+        .then((res) => {
+          console.log(res.data.message);
+          localStorage.setItem('authToken', res.data.data.token);
+          setRegisterData(initialRegisterData);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   };
 
