@@ -1,10 +1,13 @@
 import { useState } from 'react';
+import { useUserContext } from '../../../contexts/userContext';
 import { Button, Input } from '../../globals';
 
 export const Profile = () => {
+  const { userData, setUserData } = useUserContext();
+
   const initialProfileData = {
-    name: '',
-    email: '',
+    name: userData?.name || '',
+    email: userData?.email || '',
     password: '',
   };
   const [profileData, setProfileData] = useState(initialProfileData);
@@ -14,10 +17,14 @@ export const Profile = () => {
     setPasswordType(passwordType === 'password' ? 'text' : 'password');
   };
 
-  const handleLogout = (e) => {
-    // TODO: Handle logout with API
+  const handleLogout = () => {
     window.localStorage.removeItem('authToken');
     window.location.reload();
+    setUserData({
+      _id: '',
+      name: '',
+      email: '',
+    });
   };
 
   const handleProfileData = (e) => {
