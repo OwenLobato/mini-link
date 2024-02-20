@@ -13,20 +13,19 @@ export const LinkCard = ({ data }) => {
 
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
-  const getFormattedDate = (date) => {
-    let formattedDate;
+  const isValidDate = (dateString) => {
+    const date = new Date(dateString);
+    return !isNaN(date.getTime());
+  };
 
-    if (date) {
-      formattedDate = new Date(createdAt).toLocaleDateString('es-ES', {
-        day: '2-digit',
-        month: '2-digit',
-        year: '2-digit',
-      });
-    } else {
-      formattedDate = 'No date';
-    }
+  const getFormattedDate = (dateString) => {
+    if (!dateString || !isValidDate(dateString)) return 'No date';
 
-    return formattedDate;
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString().slice(-2);
+    return `${day}/${month}/${year}`;
   };
 
   const openOptions = () => {
