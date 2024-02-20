@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Input } from '../../globals';
 import { LinkCard } from '../../modules';
 
 export const Dashboard = () => {
+  const navigate = useNavigate();
+
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
 
   const [allLinks, setAllLinks] = useState([]);
 
   const handleAddLink = (e) => {
-    console.log("Navigate to 'createLink");
+    navigate('/link');
   };
 
   const handleSearchData = (e) => {

@@ -1,4 +1,10 @@
-import { Login, Register, Dashboard, Profile } from './components/modules';
+import {
+  Login,
+  Register,
+  Dashboard,
+  Profile,
+  SaveLink,
+} from './components/modules';
 import { NotFoundPage } from './components/globals';
 
 export const PublicAppRoutes = [
@@ -10,4 +16,5 @@ export const PublicAppRoutes = [
 export const AppRoutes = [
   { path: '/dashboard', component: <Dashboard /> },
   { path: '/profile', component: <Profile /> },
+  { path: '/link', component: <SaveLink /> },
 ];
