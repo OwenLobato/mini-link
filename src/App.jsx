@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { UserContext } from './contexts/userContext';
 import { PrivateRoute, NavBar } from './components/globals';
 import { PublicAppRoutes, AppRoutes } from './routes';
 
@@ -23,30 +24,32 @@ const AppLayout = ({ children }) => {
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* PUBLIC ROUTES*/}
-        {PublicAppRoutes.map(({ path, component }, index) => (
-          <Route
-            key={index}
-            path={path}
-            element={<PublicLayout>{component}</PublicLayout>}
-          />
-        ))}
-        {/* PRIVATE ROUTES */}
-        {AppRoutes.map(({ path, component }, index) => (
-          <Route
-            key={index}
-            path={path}
-            element={
-              <AppLayout>
-                <PrivateRoute>{component}</PrivateRoute>
-              </AppLayout>
-            }
-          />
-        ))}
-      </Routes>
-    </Router>
+    <UserContext>
+      <Router>
+        <Routes>
+          {/* PUBLIC ROUTES*/}
+          {PublicAppRoutes.map(({ path, component }, index) => (
+            <Route
+              key={index}
+              path={path}
+              element={<PublicLayout>{component}</PublicLayout>}
+            />
+          ))}
+          {/* PRIVATE ROUTES */}
+          {AppRoutes.map(({ path, component }, index) => (
+            <Route
+              key={index}
+              path={path}
+              element={
+                <AppLayout>
+                  <PrivateRoute>{component}</PrivateRoute>
+                </AppLayout>
+              }
+            />
+          ))}
+        </Routes>
+      </Router>
+    </UserContext>
   );
 };
 
