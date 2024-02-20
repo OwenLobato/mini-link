@@ -1,21 +1,33 @@
 import { useState } from 'react';
 import { Modal, Button } from '../../globals';
 
-export const LinkCard = ({
-  name,
-  urlCode,
-  createdAt = '2024-01-01T06:00:00.000+00:00',
-  visitCount = 0,
-  originalLink,
-  description = 'No description',
-}) => {
+export const LinkCard = ({ data }) => {
+  const {
+    name = '---',
+    urlCode = '...',
+    createdAt,
+    visitCount = 0,
+    originalLink,
+    description = 'No description',
+  } = data;
+
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
 
-  const formattedDate = new Date(createdAt).toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: '2-digit',
-  });
+  const getFormattedDate = (date) => {
+    let formattedDate;
+
+    if (date) {
+      formattedDate = new Date(createdAt).toLocaleDateString('es-ES', {
+        day: '2-digit',
+        month: '2-digit',
+        year: '2-digit',
+      });
+    } else {
+      formattedDate = 'No date';
+    }
+
+    return formattedDate;
+  };
 
   const openOptions = () => {
     setIsOptionsOpen(true);
@@ -40,7 +52,7 @@ export const LinkCard = ({
           <div className='flex flex-col items-end text-sm gap-2 w-1/4'>
             <span className='flex justify-center items-center gap-1'>
               <i className='fa-regular fa-calendar text-light-text-main' />
-              <p>{formattedDate}</p>
+              <p>{getFormattedDate(createdAt)}</p>
             </span>
 
             <span className='flex justify-center items-center gap-1'>
