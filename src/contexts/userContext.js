@@ -7,6 +7,7 @@ export const UserContext = ({ children }) => {
     _id: '',
     name: '',
     email: '',
+    links: [],
   });
 
   return (

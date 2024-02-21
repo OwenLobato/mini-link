@@ -24,6 +24,7 @@ export const Profile = () => {
       _id: '',
       name: '',
       email: '',
+      links: [],
     });
   };
 
