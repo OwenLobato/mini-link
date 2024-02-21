@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../../contexts/userContext';
 import { Button, Input } from '../../globals';
 
 export const Profile = () => {
+  const navigate = useNavigate();
   const { userData, setUserData } = useUserContext();
 
   const initialProfileData = {
@@ -19,13 +21,13 @@ export const Profile = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('authToken');
-    window.location.reload();
     setUserData({
       _id: '',
       name: '',
       email: '',
       links: [],
     });
+    navigate('/');
   };
 
   const handleProfileData = (e) => {
