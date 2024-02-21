@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../../contexts/userContext';
 import { Button, Input } from '../../globals';
 import { LinkCard } from '../../modules';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  const { userData } = useUserContext();
 
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
@@ -26,53 +28,8 @@ export const Dashboard = () => {
   };
 
   useEffect(() => {
-    // TODO: Make API request to get the links
-    const cardsDataTest = [
-      {
-        _id: '65acd97b708af1269f0a1c0a',
-        name: 'Video 1',
-        urlCode: 'aaaaaaaa',
-        originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',
-        description: 'Video de la ninja 400 sacando top speed',
-        visitCount: 0,
-        createdBy: {
-          $oid: '65acd9c16044646382a5749c',
-        },
-        createdAt: '2024-01-21T08:44:43.954Z',
-        updatedAt: '2024-01-21T08:44:43.954Z',
-        __v: 0,
-      },
-      {
-        _id: '65acd997708af1269f0a1c0e',
-        name: 'Video 2',
-        urlCode: 'bbbbbbbb',
-        originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',
-        description: 'Video de la ninja 400 sacando top speed',
-        visitCount: 0,
-        createdBy: {
-          $oid: '65acd9c16044646382a5749c',
-        },
-        createdAt: '2024-01-21T08:45:11.546Z',
-        updatedAt: '2024-01-21T08:45:11.546Z',
-        __v: 0,
-      },
-      {
-        _id: '65acda5f708af1269f0a1c14',
-        name: 'Video 1',
-        urlCode: 'cccccccc',
-        originalLink: 'https://www.youtube.com/shorts/0zoU2k6-zJ4',
-        description: 'Video de la ninja 400 sacando top speed',
-        visitCount: 13,
-        createdBy: {
-          $oid: '65acda006044646382a574a0',
-        },
-        createdAt: '2024-01-21T08:48:31.010Z',
-        updatedAt: '2024-01-21T10:29:22.484Z',
-        __v: 0,
-      },
-    ];
-    setAllLinks(cardsDataTest);
-  }, []);
+    setAllLinks(userData?.links);
+  }, [userData]);
 
   return (
     <div className='relative w-full flex flex-col justify-start items-center'>
