@@ -15,7 +15,9 @@ export const getDashboardData = (userId) => {
       }
 
       const data = {
-        user: dbUser,
+        _id: dbUser?._id,
+        name: dbUser?.name,
+        email: dbUser?.email,
         links: dbAddresses,
       };
 
