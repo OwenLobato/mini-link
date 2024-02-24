@@ -22,6 +22,12 @@ const useAddresses = (headers) => {
     });
   };
 
+  const editAddress = async (id, newAddressData) => {
+    return await request('PUT', `${base}/${id}`, headers, {
+      data: newAddressData,
+    });
+  };
+
   const goToAddress = async (urlCode) => {
     return await request('GET', `${publicBase}/${urlCode}`, headers);
   };
@@ -29,6 +35,7 @@ const useAddresses = (headers) => {
   return {
     getData,
     createAddress,
+    editAddress,
     getAddressByKey,
     goToAddress,
   };

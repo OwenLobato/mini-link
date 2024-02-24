@@ -11,7 +11,7 @@ export const SaveLink = ({ isEditMode = false }) => {
   const { state } = useLocation(); // TODO: Change state for an API call getLink(id) or something like that here
   const { id } = useParams();
 
-  const { createAddress } = useAddresses({
+  const { createAddress, editAddress } = useAddresses({
     Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
   });
 
@@ -41,13 +41,23 @@ export const SaveLink = ({ isEditMode = false }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm(linkData, ['name', 'urlCode', 'originalLink'])) {
-      createAddress(linkData)
-        .then(() => {
-          openOptions();
-        })
-        .catch((err) => {
-          console.log(err.response.data.message);
-        });
+      if (isEditMode) {
+        editAddress(id, linkData)
+          .then(() => {
+            openOptions();
+          })
+          .catch((err) => {
+            console.log(err.response.data.message);
+          });
+      } else {
+        createAddress(linkData)
+          .then(() => {
+            openOptions();
+          })
+          .catch((err) => {
+            console.log(err.response.data.message);
+          });
+      }
     }
   };
 

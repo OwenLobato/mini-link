@@ -46,6 +46,36 @@ export const createAddress = (
   });
 };
 
+export const editAddress = (
+  name,
+  urlCode,
+  originalLink,
+  description,
+  userId
+) => {
+  return new Promise(async (resolve, reject) => {
+    if (!name || !urlCode || !originalLink || !userId) {
+      reject(customError(400, 'Please provide the complete data'));
+    }
+
+    try {
+      const address = await Address.findById(userId);
+      if (!address) reject(customError(404, 'Address not found'));
+
+      address.name = name;
+      address.urlCode = urlCode;
+      address.originalLink = originalLink;
+      address.description = description;
+
+      await address.save();
+
+      resolve(address);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 export const getAddressByKey = (key, value, createdBy) => {
   return new Promise(async (resolve, reject) => {
     try {

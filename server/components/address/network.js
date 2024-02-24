@@ -2,6 +2,7 @@ import express from 'express';
 import {
   getData,
   createAddress,
+  editAddress,
   getAddressByKey,
   goToAddress,
 } from './controller.js';
@@ -46,6 +47,18 @@ addressRouter.post('/', (req, res) => {
     });
 });
 
+addressRouter.put('/:id', (req, res) => {
+  const { id } = req.params;
+  const { name, urlCode, originalLink, description } = req.body;
+
+  editAddress(name, urlCode, originalLink, description, id)
+    .then((userData) => {
+      return success(req, res, 200, 'URL edited succesfully', userData);
+    })
+    .catch((err) => {
+      return error(req, res, 500, 'Error editing URL', err);
+    });
+});
 // PUBLIC ADDRESS ROUTER (/short/)
 export const publicAddressRouter = express.Router();
 
