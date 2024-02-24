@@ -16,6 +16,10 @@ const useAddresses = (headers) => {
     );
   };
 
+  const getAddress = async (linkId) => {
+    return await request('GET', `${base}/link/${linkId}`, headers);
+  };
+
   const createAddress = async (addressData) => {
     return await request('POST', `${base}/`, headers, {
       data: addressData,
@@ -34,6 +38,7 @@ const useAddresses = (headers) => {
 
   return {
     getData,
+    getAddress,
     createAddress,
     editAddress,
     getAddressByKey,

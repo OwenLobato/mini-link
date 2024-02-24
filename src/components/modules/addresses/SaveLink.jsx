@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { miniLinkPath } from '../../../helpers/originPaths';
 import { validateForm } from '../../../helpers/formActions';
@@ -8,10 +8,9 @@ import { Button, Input, Modal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
-  const { state } = useLocation(); // TODO: Change state for an API call getLink(id) or something like that here
   const { id } = useParams();
 
-  const { createAddress, editAddress } = useAddresses({
+  const { createAddress, editAddress, getAddress } = useAddresses({
     Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
   });
 
@@ -67,9 +66,13 @@ export const SaveLink = ({ isEditMode = false }) => {
 
   useEffect(() => {
     if (isEditMode) {
-      // TODO: Make API request getLink(id)
-      console.log(id);
-      setLinkData(state);
+      getAddress(id)
+        .then(({ data: { data } }) => {
+          setLinkData(data[0]);
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   }, []);
 
