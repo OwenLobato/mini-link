@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { miniLinkPath } from '../../../helpers/originPaths';
+import { validateForm } from '../../../helpers/formActions';
 import { Button, Input, Modal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
@@ -32,19 +33,9 @@ export const SaveLink = ({ isEditMode = false }) => {
     setLinkData({ ...linkData, [id]: value });
   };
 
-  const validateForm = () => {
-    const requiredFields = ['name', 'urlCode', 'originalLink'];
-    const isEmpty = requiredFields.some((field) => !linkData[field]);
-    if (isEmpty) {
-      alert('Please fill all required fields');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (validateForm(linkData, ['name', 'urlCode', 'originalLink'])) {
       console.log('linkData:', linkData);
       // TODO: Make API request
       if (true /* All fine*/) {

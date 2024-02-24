@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, Input } from '../../globals';
 import useAuth from '../../../hooks/useAuth';
+import { validateForm } from '../../../helpers/formActions';
+import { Button, Input } from '../../globals';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -23,19 +24,9 @@ export const Login = () => {
     setLoginData({ ...loginData, [id]: value });
   };
 
-  const validateForm = () => {
-    const isEmpty = Object.values(loginData).some((value) => value === '');
-    if (isEmpty) {
-      // TODO: Add modal
-      alert('Please fill all fields');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (validateForm(loginData)) {
       const { email, password } = loginData;
 
       login(email, password)

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../../contexts/userContext';
+import { validateForm } from '../../../helpers/formActions';
 import { Button, Input } from '../../globals';
 
 export const Profile = () => {
@@ -35,19 +36,9 @@ export const Profile = () => {
     setProfileData({ ...profileData, [id]: value });
   };
 
-  const validateForm = () => {
-    const isEmpty = Object.values(profileData).some((value) => value === '');
-    if (isEmpty) {
-      // TODO: Add modal
-      alert('Please fill all fields');
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (validateForm(profileData, ['name', 'email'])) {
       console.log('profileData:', profileData);
       // TODO: Make API request
     }

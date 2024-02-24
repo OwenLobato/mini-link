@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import useAuth from '../../../hooks/useAuth';
-import { Button, Input } from '../../globals';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../../../hooks/useAuth';
+import { validateForm } from '../../../helpers/formActions';
+import { Button, Input } from '../../globals';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -25,16 +26,6 @@ export const Register = () => {
     setRegisterData({ ...registerData, [id]: value });
   };
 
-  const validateForm = () => {
-    const isEmpty = Object.values(registerData).some((value) => value === '');
-    if (isEmpty) {
-      // TODO: Add modal
-      alert('Please fill all fields');
-      return false;
-    }
-    return true;
-  };
-
   const checkPassword = () => {
     if (registerData.password !== registerData.confirmPassword) {
       // TODO: Add modal
@@ -46,7 +37,7 @@ export const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm() && checkPassword()) {
+    if (validateForm(registerData) && checkPassword()) {
       const { name, email, password } = registerData;
 
       register(name, email, password)
