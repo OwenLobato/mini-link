@@ -11,9 +11,14 @@ const useUsers = (headers) => {
     return await request('GET', `${base}/`, headers);
   };
 
+  const editUser = async () => {
+    return await request('PUT', `${base}/`, headers);
+  };
+
   return {
     getDashboardData,
     getUsers,
+    editUser,
   };
 };
 

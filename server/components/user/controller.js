@@ -1,4 +1,4 @@
-import { findUserBy, getAllUsers } from './store.js';
+import { findUserBy, getAllUsers, modifyUser } from './store.js';
 import { findAddressBy } from '../address/store.js';
 import { customError } from '../../network/response.js';
 
@@ -37,6 +37,30 @@ export const getData = () => {
       }
 
       resolve(dbUser);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+export const editUser = (name, email, password, userId) => {
+  return new Promise(async (resolve, reject) => {
+    if (!name || !email || !userId) {
+      reject(customError(400, 'Please provide the complete data'));
+    }
+
+    let updateFields = { name, email };
+    if (password) {
+      updateFields.password = password;
+    }
+
+    try {
+      const updatedUser = await modifyUser(updateFields, userId);
+      if (!updatedUser) {
+        reject(customError(401, 'Users not found'));
+      }
+
+      resolve(updatedUser);
     } catch (err) {
       reject(err);
     }

@@ -32,10 +32,14 @@ export const login = (email, password) => {
   });
 };
 
-export const register = (name, email, password) => {
+export const register = (name, email, password, confirmPassword) => {
   return new Promise(async (resolve, reject) => {
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !confirmPassword) {
       reject(customError(400, 'Please provide the complete data'));
+    }
+
+    if (password !== confirmPassword) {
+      reject(customError(400, 'Passwords do not match'));
     }
 
     try {
