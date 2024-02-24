@@ -10,7 +10,7 @@ export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { createAddress, editAddress, getAddress } = useAddresses({
+  const { createAddress, editAddress, getAddressByKey } = useAddresses({
     Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
   });
 
@@ -66,7 +66,7 @@ export const SaveLink = ({ isEditMode = false }) => {
 
   useEffect(() => {
     if (isEditMode) {
-      getAddress(id)
+      getAddressByKey('_id', id)
         .then(({ data: { data } }) => {
           setLinkData(data[0]);
         })

@@ -22,19 +22,6 @@ addressRouter.get('/', (req, res) => {
     });
 });
 
-addressRouter.get('/link/:linkId', (req, res) => {
-  const { linkId } = req.params;
-  const { _id } = res.locals;
-
-  getAddressByKey('_id', linkId, _id)
-    .then((userData) => {
-      return success(req, res, 200, 'URL obtained succesfully', userData);
-    })
-    .catch((err) => {
-      return error(req, res, 500, 'Error obtaining URL', err);
-    });
-});
-
 addressRouter.post('/', (req, res) => {
   const { name, urlCode, originalLink, description } = req.body;
   const { _id } = res.locals;
