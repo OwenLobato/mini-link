@@ -34,10 +34,10 @@ addressRouter.get('/:createdBy', (req, res) => {
 });
 
 addressRouter.post('/', (req, res) => {
-  // TODO: Get userId to "createdBy" and send it (Now is from body, get from locals)
-  const { urlCode, originalLink, name, description, createdBy } = req.body;
+  const { name, urlCode, originalLink, description } = req.body;
+  const { _id } = res.locals;
 
-  createAddress(urlCode, originalLink, name, description, createdBy)
+  createAddress(urlCode, originalLink, name, description, _id)
     .then((userData) => {
       return success(req, res, 200, 'URL created succesfully', userData);
     })

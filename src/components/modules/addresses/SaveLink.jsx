@@ -3,12 +3,17 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { miniLinkPath } from '../../../helpers/originPaths';
 import { validateForm } from '../../../helpers/formActions';
+import useAddresses from '../../../hooks/useAddresses';
 import { Button, Input, Modal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
   const { state } = useLocation(); // TODO: Change state for an API call getLink(id) or something like that here
   const { id } = useParams();
+
+  const { createAddress } = useAddresses({
+    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+  });
 
   const initialLinkData = {
     name: '',
@@ -36,11 +41,13 @@ export const SaveLink = ({ isEditMode = false }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm(linkData, ['name', 'urlCode', 'originalLink'])) {
-      console.log('linkData:', linkData);
-      // TODO: Make API request
-      if (true /* All fine*/) {
-        openOptions();
-      }
+      createAddress(linkData)
+        .then(() => {
+          openOptions();
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   };
 

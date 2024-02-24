@@ -3,7 +3,7 @@ import { request } from '../utils/requests';
 const base = '/addresses';
 const publicBase = '/short';
 
-const useUsers = (headers) => {
+const useAddresses = (headers) => {
   const getData = async () => {
     return await request('GET', `${base}`, headers);
   };
@@ -34,4 +34,4 @@ const useUsers = (headers) => {
   };
 };
 
-export default useUsers;
+export default useAddresses;
