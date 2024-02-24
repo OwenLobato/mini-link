@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import QRCode from 'react-qr-code';
+import { miniLinkPath } from '../../../helpers/originPaths';
 import { Button, Input, Modal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
@@ -136,12 +137,12 @@ export const SaveLink = ({ isEditMode = false }) => {
           </h2>
 
           <QRCode
-            value={`http://domain/short/${linkData?.urlCode}`}
+            value={`${miniLinkPath(linkData?.urlCode)}`}
             className='m-4'
           />
 
           <p className='text-center font-bold text-light-text-main mb-4'>
-            http://domain/short/{linkData?.urlCode}
+            {miniLinkPath(linkData?.urlCode)}
           </p>
 
           <Button
@@ -150,7 +151,7 @@ export const SaveLink = ({ isEditMode = false }) => {
             icon={<i className='fa-solid fa-copy' />}
             onClick={() => {
               window.navigator.clipboard.writeText(
-                `http://domain/short/${linkData?.urlCode}`
+                `${miniLinkPath(linkData?.urlCode)}`
               );
             }}
           />

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { miniLinkPath } from '../../../helpers/originPaths';
 import QRCode from 'react-qr-code';
 import { Modal, Button } from '../../globals';
 
@@ -41,7 +42,7 @@ export const LinkCard = ({ data }) => {
   };
 
   const handleCopy = () => {
-    window.navigator.clipboard.writeText(`http://domain/short/${urlCode}`);
+    window.navigator.clipboard.writeText(miniLinkPath(urlCode));
     closeModal();
   };
 
@@ -190,10 +191,10 @@ const DeleteModal = ({ cancel, deleteLink }) => {
 const QrModal = ({ urlCode }) => {
   return (
     <div className='flex flex-col items-center justify-center'>
-      <QRCode value='http://domain/short/{urlCode}' className='m-4' />
+      <QRCode value={`${miniLinkPath(urlCode)}`} className='m-4' />
 
       <p className='text-center font-bold text-light-text-main mb-4'>
-        http://domain/short/{urlCode}
+        {`${miniLinkPath(urlCode)}`}
       </p>
 
       <Button
@@ -201,9 +202,7 @@ const QrModal = ({ urlCode }) => {
         text={'Copy mini link'}
         icon={<i className='fa-regular fa-copy' />}
         onClick={() => {
-          window.navigator.clipboard.writeText(
-            `http://domain/short/${urlCode}`
-          );
+          window.navigator.clipboard.writeText(`${miniLinkPath(urlCode)}`);
         }}
       />
     </div>
