@@ -4,16 +4,9 @@ const base = '/addresses';
 const publicBase = '/short';
 
 const useAddresses = (headers) => {
-  const getData = async () => {
-    return await request('GET', `${base}`, headers);
-  };
-
-  const getAddressByKey = async (createdBy, key, value) => {
-    return await request(
-      'GET',
-      `${base}/${createdBy}?${key}=${value}`,
-      headers
-    );
+  const getAddressByKey = async (key, value) => {
+    const params = key && value ? `?${key}=${value}` : '';
+    return await request('GET', `${base}${params}`, headers);
   };
 
   const getAddress = async (linkId) => {
@@ -37,7 +30,6 @@ const useAddresses = (headers) => {
   };
 
   return {
-    getData,
     getAddress,
     createAddress,
     editAddress,

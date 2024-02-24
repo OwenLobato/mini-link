@@ -1,22 +1,7 @@
 import Address from '../../models/Address.js';
-import { getAllAddresses, findAddressBy } from './store.js';
+import { findAddressBy } from './store.js';
 import { objectIdConversor } from '../helpers/dbConverters.js';
 import { customError } from '../../network/response.js';
-
-export const getData = () => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const dbAddresses = await getAllAddresses();
-      if (!dbAddresses) {
-        reject(customError(401, 'URLs not found'));
-      }
-
-      resolve(dbAddresses);
-    } catch (err) {
-      reject(err);
-    }
-  });
-};
 
 export const createAddress = (
   urlCode,

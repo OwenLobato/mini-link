@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUserContext } from '../../../contexts/userContext';
+import useAddresses from '../../../hooks/useAddresses';
 import { Button, Input } from '../../globals';
 import { LinkCard } from '../../modules';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
-  const { userData } = useUserContext();
+  const { getAddressByKey } = useAddresses({
+    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+  });
 
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
@@ -28,8 +30,14 @@ export const Dashboard = () => {
   };
 
   useEffect(() => {
-    setAllLinks(userData?.links);
-  }, [userData]);
+    getAddressByKey()
+      .then((res) => {
+        setAllLinks(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  }, []);
 
   return (
     <div className='relative w-full flex flex-col justify-start items-center'>

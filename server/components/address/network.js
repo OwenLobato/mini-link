@@ -1,6 +1,5 @@
 import express from 'express';
 import {
-  getData,
   createAddress,
   editAddress,
   getAddressByKey,
@@ -11,21 +10,10 @@ import { success, error } from '../../network/response.js';
 export const addressRouter = express.Router();
 
 addressRouter.get('/', (req, res) => {
-  getData()
-    .then((userData) => {
-      return success(req, res, 200, 'URLs successfully obtained', userData);
-    })
-    .catch((err) => {
-      return error(req, res, 500, 'Error getting URLs', err);
-    });
-});
-
-addressRouter.get('/:createdBy', (req, res) => {
-  // TODO: Get userId (createdBy) and send it (Now is from params but get from locals)
-  const { createdBy } = req.params;
+  const { _id } = res.locals;
   const [key, value] = Object.entries(req.query)[0] || [];
 
-  getAddressByKey(key, value, createdBy)
+  getAddressByKey(key, value, _id)
     .then((userData) => {
       return success(req, res, 200, 'URL obtained succesfully', userData);
     })
