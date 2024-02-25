@@ -7,17 +7,17 @@ const useUsers = (headers) => {
     return await request('GET', `${base}/dashboard`, headers);
   };
 
-  const getUsers = async () => {
+  const getUser = async () => {
     return await request('GET', `${base}/`, headers);
   };
 
-  const editUser = async () => {
-    return await request('PUT', `${base}/`, headers);
+  const editUser = async (profileData) => {
+    return await request('PUT', `${base}/`, headers, { data: profileData });
   };
 
   return {
     getDashboardData,
-    getUsers,
+    getUser,
     editUser,
   };
 };

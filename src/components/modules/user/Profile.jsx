@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../../contexts/userContext';
+import useUsers from '../../../hooks/useUsers';
 import { validateForm } from '../../../helpers/formActions';
 import { Button, Input } from '../../globals';
 
 export const Profile = () => {
   const navigate = useNavigate();
-  const { userData, setUserData } = useUserContext();
+  const { setUserData } = useUserContext();
+  const { editUser, getUser } = useUsers({
+    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+  });
 
   const initialProfileData = {
-    name: userData?.name || '',
-    email: userData?.email || '',
-    password: '',
+    name: '',
+    email: '',
   };
   const [profileData, setProfileData] = useState(initialProfileData);
+  const [password, setPassword] = useState('');
   const [passwordType, setPasswordType] = useState('password');
 
   const handleShowPassword = () => {
@@ -33,16 +37,36 @@ export const Profile = () => {
 
   const handleProfileData = (e) => {
     const { id, value } = e.target;
-    setProfileData({ ...profileData, [id]: value });
+    if (id === 'password') {
+      setPassword(value);
+    } else {
+      setProfileData({ ...profileData, [id]: value });
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm(profileData, ['name', 'email'])) {
-      console.log('profileData:', profileData);
-      // TODO: Make API request
+      editUser({ ...profileData, password })
+        .then((res) => {
+          //TODO: Add modal success
+          alert(res.data.message);
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+        });
     }
   };
+
+  useEffect(() => {
+    getUser()
+      .then((res) => {
+        setProfileData(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  }, []);
 
   return (
     <div className='w-full flex flex-col justify-start items-center '>
@@ -73,7 +97,7 @@ export const Profile = () => {
             label='Name'
             placeholder={'Type your name'}
             onChange={handleProfileData}
-            value={profileData.name}
+            value={profileData?.name}
             startAdornment={<i className='fa-solid fa-user' />}
             className='w-full'
           />
@@ -83,7 +107,7 @@ export const Profile = () => {
             label='Email'
             placeholder={'Type your email address'}
             onChange={handleProfileData}
-            value={profileData.email}
+            value={profileData?.email}
             startAdornment={<i className='fa-solid fa-envelope' />}
             className='w-full'
           />
@@ -93,7 +117,7 @@ export const Profile = () => {
             label='Password'
             placeholder='Type your password'
             onChange={handleProfileData}
-            value={profileData.password}
+            value={profileData?.password}
             startAdornment={<i className='fa-solid fa-lock' />}
             finishAdornment={
               <i

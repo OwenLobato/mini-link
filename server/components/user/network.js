@@ -1,5 +1,5 @@
 import express from 'express';
-import { getData, getDashboardData, editUser } from './controller.js';
+import { getProfile, getDashboardData, editUser } from './controller.js';
 import { success, error } from '../../network/response.js';
 
 export const userRouter = express.Router();
@@ -20,7 +20,9 @@ userRouter.get('/dashboard', (req, res) => {
 });
 
 userRouter.get('/', (req, res) => {
-  getData()
+  const { _id } = res.locals;
+
+  getProfile(_id)
     .then((userData) => {
       return success(
         req,

@@ -28,10 +28,10 @@ export const getDashboardData = (userId) => {
   });
 };
 
-export const getData = () => {
+export const getProfile = (userId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const dbUser = await getAllUsers();
+      const dbUser = await findUserBy('_id', userId);
       if (!dbUser) {
         reject(customError(401, 'Users not found'));
       }
