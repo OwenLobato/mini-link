@@ -1,16 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import useUsers from '../../hooks/useUsers';
-import { useUserContext } from '../../contexts/userContext';
 
 export const NavBar = () => {
   const location = useLocation();
   const authToken = localStorage.getItem('authToken');
-
-  const { getDashboardData } = useUsers({
-    Authorization: `Bearer ${authToken}`,
-  });
-  const { setUserData } = useUserContext();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -48,16 +41,6 @@ export const NavBar = () => {
     { path: '/dashboard', label: 'Dashboard', private: true },
     { path: '/profile', label: 'Profile', private: true },
   ];
-
-  useEffect(() => {
-    getDashboardData()
-      .then((res) => {
-        setUserData(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
-  }, []);
 
   return (
     <nav className='absolute w-full bg-light-bg-main max-w-screen flex flex-wrap items-center justify-between p-2 mb-7 z-40'>
