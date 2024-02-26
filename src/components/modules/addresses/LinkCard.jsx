@@ -64,6 +64,7 @@ export const LinkCard = ({ data }) => {
     deleteAddress(data._id)
       .then((res) => {
         console.log(res.data.message);
+        window.location.reload();
       })
       .catch((err) => {
         console.log(err.response.data.message);
