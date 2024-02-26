@@ -114,7 +114,7 @@ export const Profile = () => {
               icon={<i className='fa-solid fa-arrow-right-from-bracket' />}
               text='Log out'
               onClick={handleLogout}
-              className={'border-light-alert text-light-alert hover:bg-red-50'}
+              className={'border-red-500 text-red-500 hover:bg-red-50'}
             />
           </div>
         </div>

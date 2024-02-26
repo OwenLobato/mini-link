@@ -200,7 +200,7 @@ const OptionsModal = ({
           text={'Delete'}
           icon={<i className='fa-solid fa-trash' />}
           onClick={handleDelete}
-          className={'border-light-alert text-light-alert hover:bg-red-50'}
+          className={'border-red-500 text-red-500 hover:bg-red-50'}
         />
       </div>
     </>
@@ -222,7 +222,7 @@ const DeleteModal = ({ cancel, deleteLink }) => {
           variant='outlined'
           text={'Yes, delete'}
           onClick={deleteLink}
-          className={'border-light-alert text-light-alert hover:bg-red-50'}
+          className={'border-red-500 text-red-500 hover:bg-red-50'}
         />
       </div>
     </div>
