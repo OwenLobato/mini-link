@@ -12,8 +12,11 @@ export const Dashboard = () => {
 
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
+  const [filterParam, setFilterParam] = useState('name');
   const [allLinks, setAllLinks] = useState([]);
   const [modalContent, setModalContent] = useState(null);
+
+  console.log(`🚀 allLinks:`, allLinks);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -34,7 +37,15 @@ export const Dashboard = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('profileData:', searchData);
+    console.log('Serch data:', searchData);
+  };
+
+  const handleFilter = () => {
+    console.log('Filter...');
+  };
+
+  const handleSort = () => {
+    console.log('sort...');
   };
 
   useEffect(() => {
@@ -71,7 +82,10 @@ export const Dashboard = () => {
         </div>
 
         <div className='w-full mb-5'>
-          <form onSubmit={handleSubmit}>
+          <form
+            onSubmit={handleSubmit}
+            className='flex flex-col md:flex-row w-full justify-between items-center gap-1 md:gap-2'
+          >
             <Input
               id='search'
               type='text'
@@ -80,11 +94,26 @@ export const Dashboard = () => {
               onChange={handleSearchData}
               value={searchData}
               startAdornment={<i className='fa-solid fa-magnifying-glass' />}
+              className={'w-full md:w-10/12'}
             />
+            <div className='flex justify-center items-center gap-1 w-full md:w-2/12'>
+              <Button
+                variant='outlined'
+                icon={<i className='fa-solid fa-filter' />}
+                text='Filter'
+                onClick={handleFilter}
+              />
+              <Button
+                variant='outlined'
+                icon={<i className='fa-solid fa-sort' />}
+                text='Sort'
+                onClick={handleSort}
+              />
+            </div>
           </form>
         </div>
 
-        <div className='flex justify-center items-start overflow-x-auto scroll-premium w-full absolute top-40 bottom-0 p-2 md:p-4 '>
+        <div className='flex justify-center items-start overflow-x-auto scroll-premium w-full absolute top-40 bottom-0 p-2 md:p-4 mt-8 md:mt-0'>
           {allLinks.length ? (
             <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
               {allLinks.map((link, index) => (
