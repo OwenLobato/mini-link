@@ -1,11 +1,13 @@
 export const validateForm = (
   formData = {},
-  requiredFields = Object.keys(formData)
+  requiredFields = Object.keys(formData),
+  errorCallback = () => {
+    alert('Fill the required fields');
+  }
 ) => {
   const isEmpty = requiredFields.some((field) => !formData[field]);
   if (isEmpty) {
-    // TODO: Add modal
-    alert('Please fill all required fields');
+    errorCallback();
     return false;
   }
   return true;

@@ -10,9 +10,9 @@ const useAuth = (headers) => {
     });
   };
 
-  const register = async (name, email, password) => {
+  const register = async (name, email, password, confirmPassword) => {
     return await request('POST', `${authVersion}/register`, headers, {
-      data: { name, email, password },
+      data: { name, email, password, confirmPassword },
       api: false,
     });
   };

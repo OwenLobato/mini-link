@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
 import { miniLinkPath } from '../../../helpers/originPaths';
 import useAddresses from '../../../hooks/useAddresses';
-import { Modal, Button } from '../../globals';
+import { Modal, MessageOnModal, Button } from '../../globals';
 
 export const LinkCard = ({ data }) => {
   const {
@@ -47,12 +47,17 @@ export const LinkCard = ({ data }) => {
 
   const handleCopy = () => {
     window.navigator.clipboard.writeText(miniLinkPath(urlCode));
-    closeModal();
+    openModal(
+      <MessageOnModal
+        type='success'
+        title={'Copied to clipboard'}
+        message={miniLinkPath(urlCode)}
+      />
+    );
   };
 
   const handleQrCode = () => {
-    console.log('Create QR Code...');
-    openModal(<QrModal urlCode={urlCode} />);
+    openModal(<QrModal urlCode={urlCode} handleCopy={handleCopy} />);
   };
 
   const handleEdit = () => {
@@ -67,7 +72,13 @@ export const LinkCard = ({ data }) => {
         window.location.reload();
       })
       .catch((err) => {
-        console.log(err.response.data.message);
+        openModal(
+          <MessageOnModal
+            type='error'
+            title={'Error'}
+            message={err.response.data.message}
+          />
+        );
       });
   };
 
@@ -199,7 +210,7 @@ const DeleteModal = ({ cancel, deleteLink }) => {
   );
 };
 
-const QrModal = ({ urlCode }) => {
+const QrModal = ({ urlCode, handleCopy }) => {
   return (
     <div className='flex flex-col items-center justify-center'>
       <QRCode value={`${miniLinkPath(urlCode)}`} className='m-4' />
@@ -212,9 +223,7 @@ const QrModal = ({ urlCode }) => {
         alwaysShowText
         text={'Copy mini link'}
         icon={<i className='fa-regular fa-copy' />}
-        onClick={() => {
-          window.navigator.clipboard.writeText(`${miniLinkPath(urlCode)}`);
-        }}
+        onClick={handleCopy}
       />
     </div>
   );

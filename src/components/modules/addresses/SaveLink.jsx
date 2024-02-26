@@ -7,7 +7,7 @@ import {
   generateRandomString,
 } from '../../../helpers/formActions';
 import useAddresses from '../../../hooks/useAddresses';
-import { Button, Input, Modal } from '../../globals';
+import { Button, Input, Modal, MessageOnModal } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
@@ -24,14 +24,14 @@ export const SaveLink = ({ isEditMode = false }) => {
     description: '',
   };
   const [linkData, setLinkData] = useState(initialLinkData);
-  const [isOptionsOpen, setIsOptionsOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
 
-  const openOptions = () => {
-    setIsOptionsOpen(true);
+  const openModal = (content) => {
+    setModalContent(content);
   };
 
-  const closeOptions = () => {
-    setIsOptionsOpen(false);
+  const closeModal = () => {
+    setModalContent(null);
     navigate('/dashboard');
   };
 
@@ -42,22 +42,54 @@ export const SaveLink = ({ isEditMode = false }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (validateForm(linkData, ['name', 'urlCode', 'originalLink'])) {
+    if (
+      validateForm(linkData, ['name', 'urlCode', 'originalLink'], () => {
+        openModal(
+          <MessageOnModal
+            type={'warning'}
+            title={'Form validation'}
+            message={'Please fill all required fields'}
+          />
+        );
+      })
+    ) {
       if (isEditMode) {
         editAddress(id, linkData)
           .then(() => {
-            openOptions();
+            openModal(
+              <OptionsModal
+                isEditMode={isEditMode}
+                urlCode={linkData?.urlCode}
+              />
+            );
           })
           .catch((err) => {
-            console.log(err.response.data.message);
+            openModal(
+              <MessageOnModal
+                type={'error'}
+                title={err.response.data.message}
+                message={'Please, try again later'}
+              />
+            );
           });
       } else {
         createAddress(linkData)
           .then(() => {
-            openOptions();
+            openModal(
+              <OptionsModal
+                isEditMode={isEditMode}
+                urlCode={linkData?.urlCode}
+              />
+            );
           })
           .catch((err) => {
-            console.log(err.response.data.message);
+            openModal(
+              <MessageOnModal
+                type={'error'}
+                title={err.response.data.message}
+                message={'Please, try again later'}
+              />
+            );
           });
       }
     }
@@ -82,7 +114,13 @@ export const SaveLink = ({ isEditMode = false }) => {
           }
         })
         .catch((err) => {
-          console.log(err.response.data.message);
+          openModal(
+            <MessageOnModal
+              type={'error'}
+              title={err.response.data.message}
+              message={'Please, try again later'}
+            />
+          );
         });
     }
   }, []);
@@ -160,34 +198,35 @@ export const SaveLink = ({ isEditMode = false }) => {
         </div>
       </div>
 
-      <Modal isOpen={isOptionsOpen} onClose={closeOptions}>
-        <div className='flex flex-col items-center justify-center'>
-          <h2 className='text-xl text-center font-bold text-light-text-main mb-4'>
-            Your mini link has been {isEditMode ? 'modified' : 'generated'}{' '}
-            correctly
-          </h2>
-
-          <QRCode
-            value={`${miniLinkPath(linkData?.urlCode)}`}
-            className='m-4'
-          />
-
-          <p className='text-center font-bold text-light-text-main mb-4'>
-            {miniLinkPath(linkData?.urlCode)}
-          </p>
-
-          <Button
-            alwaysShowText
-            text={'Copy'}
-            icon={<i className='fa-solid fa-copy' />}
-            onClick={() => {
-              window.navigator.clipboard.writeText(
-                `${miniLinkPath(linkData?.urlCode)}`
-              );
-            }}
-          />
-        </div>
+      <Modal isOpen={modalContent !== null} onClose={closeModal}>
+        {modalContent}
       </Modal>
     </>
+  );
+};
+
+const OptionsModal = ({ isEditMode, urlCode }) => {
+  return (
+    <div className='flex flex-col items-center justify-center'>
+      <h2 className='text-xl text-center font-bold text-light-text-main mb-4'>
+        Your mini link has been {isEditMode ? 'modified' : 'generated'}{' '}
+        correctly
+      </h2>
+
+      <QRCode value={`${miniLinkPath(urlCode)}`} className='m-4' />
+
+      <p className='text-center font-bold text-light-text-main mb-4'>
+        {miniLinkPath(urlCode)}
+      </p>
+
+      <Button
+        alwaysShowText
+        text={'Copy'}
+        icon={<i className='fa-solid fa-copy' />}
+        onClick={() => {
+          window.navigator.clipboard.writeText(`${miniLinkPath(urlCode)}`);
+        }}
+      />
+    </div>
   );
 };
