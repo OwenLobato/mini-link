@@ -45,6 +45,10 @@ export const LinkCard = ({ data }) => {
     setModalContent(null);
   };
 
+  const handleRedirect = () => {
+    window.open(`/s/${urlCode}`, '_blank');
+  };
+
   const handleCopy = () => {
     window.navigator.clipboard.writeText(miniLinkPath(urlCode));
     openModal(
@@ -88,6 +92,8 @@ export const LinkCard = ({ data }) => {
         cancel={() => {
           openModal(
             <OptionsModal
+              name={data?.name}
+              handleRedirect={handleRedirect}
               handleCopy={handleCopy}
               handleQrCode={handleQrCode}
               handleEdit={handleEdit}
@@ -106,6 +112,8 @@ export const LinkCard = ({ data }) => {
         onClick={() =>
           openModal(
             <OptionsModal
+              name={data?.name}
+              handleRedirect={handleRedirect}
               handleCopy={handleCopy}
               handleQrCode={handleQrCode}
               handleEdit={handleEdit}
@@ -145,6 +153,8 @@ export const LinkCard = ({ data }) => {
 };
 
 const OptionsModal = ({
+  name,
+  handleRedirect,
   handleCopy,
   handleQrCode,
   handleEdit,
@@ -152,10 +162,19 @@ const OptionsModal = ({
 }) => {
   return (
     <>
-      <h2 className='text-2xl text-center font-bold text-light-text-main mb-4'>
-        Options
+      <h2 className='text-2xl text-center font-bold text-light-text-main mb-2'>
+        Link options
       </h2>
+      <h3 className='text-lg text-center font-bold text-light-text-main mb-4'>
+        {name}
+      </h3>
       <div className='flex flex-col justify-center gap-2'>
+        <Button
+          alwaysShowText
+          text={'Visit'}
+          icon={<i className='fa-solid fa-paper-plane' />}
+          onClick={handleRedirect}
+        />
         <Button
           alwaysShowText
           text={'Copy'}
