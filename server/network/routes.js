@@ -25,5 +25,5 @@ export const addressRoutes = (app) => {
 };
 
 export const publicAddressRoutes = (app) => {
-  app.use(`${apiVersion}/short`, publicAddressRouter);
+  app.use(`${apiVersion}/s`, publicAddressRouter);
 };

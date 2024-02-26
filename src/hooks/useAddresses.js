@@ -1,7 +1,7 @@
 import { request } from '../utils/requests';
 
 const base = '/addresses';
-const publicBase = '/short';
+const publicBase = '/s';
 
 const useAddresses = (headers) => {
   const getAddressByKey = async (key, value) => {
