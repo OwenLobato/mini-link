@@ -21,6 +21,10 @@ const useAddresses = (headers) => {
     });
   };
 
+  const deleteAddress = async (addressId) => {
+    return await request('DELETE', `${base}/${addressId}`, headers);
+  };
+
   const goToAddress = async (urlCode) => {
     return await request('GET', `${publicBase}/${urlCode}`, headers);
   };
@@ -29,6 +33,7 @@ const useAddresses = (headers) => {
     createAddress,
     editAddress,
     getAddressByKey,
+    deleteAddress,
     goToAddress,
   };
 };

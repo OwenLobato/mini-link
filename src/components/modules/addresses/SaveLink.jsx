@@ -75,7 +75,11 @@ export const SaveLink = ({ isEditMode = false }) => {
     if (isEditMode) {
       getAddressByKey('_id', id)
         .then(({ data: { data } }) => {
-          setLinkData(data[0]);
+          if (data[0]) {
+            setLinkData(data[0]);
+          } else {
+            console.log('Data not found');
+          }
         })
         .catch((err) => {
           console.log(err.response.data.message);

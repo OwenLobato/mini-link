@@ -2,6 +2,7 @@ import express from 'express';
 import {
   createAddress,
   editAddress,
+  deleteAddress,
   getAddressByKey,
   goToAddress,
 } from './controller.js';
@@ -47,6 +48,20 @@ addressRouter.put('/:id', (req, res) => {
       return error(req, res, 500, 'Error editing URL', err);
     });
 });
+
+addressRouter.delete('/:id', (req, res) => {
+  const { id } = req.params;
+  const { _id } = res.locals;
+
+  deleteAddress(id, _id)
+    .then((userData) => {
+      return success(req, res, 200, 'URL removed succesfully', userData);
+    })
+    .catch((err) => {
+      return error(req, res, 500, 'Error deleting URL', err);
+    });
+});
+
 // PUBLIC ADDRESS ROUTER (/short/)
 export const publicAddressRouter = express.Router();
 

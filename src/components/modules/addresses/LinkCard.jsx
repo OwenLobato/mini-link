@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { miniLinkPath } from '../../../helpers/originPaths';
 import QRCode from 'react-qr-code';
+import { miniLinkPath } from '../../../helpers/originPaths';
+import useAddresses from '../../../hooks/useAddresses';
 import { Modal, Button } from '../../globals';
 
 export const LinkCard = ({ data }) => {
@@ -15,6 +16,9 @@ export const LinkCard = ({ data }) => {
   } = data;
 
   const navigate = useNavigate();
+  const { deleteAddress } = useAddresses({
+    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+  });
 
   const [modalContent, setModalContent] = useState(null);
 
@@ -52,12 +56,18 @@ export const LinkCard = ({ data }) => {
   };
 
   const handleEdit = () => {
-    navigate(`/link/${data._id}`, { state: data });
+    navigate(`/link/${data._id}`);
   };
 
   const handleDeleteLink = () => {
-    console.log('Delete link...');
     closeModal();
+    deleteAddress(data._id)
+      .then((res) => {
+        console.log(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
   };
 
   const handleDelete = () => {

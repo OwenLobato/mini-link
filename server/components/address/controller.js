@@ -61,6 +61,26 @@ export const editAddress = (
   });
 };
 
+export const deleteAddress = (addressId, userId) => {
+  return new Promise(async (resolve, reject) => {
+    if (!addressId || !userId) {
+      reject(customError(400, 'Please provide the complete data'));
+    }
+
+    try {
+      const deletedAddress = await Address.findOneAndDelete({
+        _id: addressId,
+        createdBy: userId,
+      });
+      if (!deletedAddress) reject(customError(404, 'Address not found'));
+
+      resolve(deletedAddress);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
 export const getAddressByKey = (key, value, createdBy) => {
   return new Promise(async (resolve, reject) => {
     try {
