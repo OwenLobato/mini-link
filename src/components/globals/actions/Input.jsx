@@ -1,5 +1,5 @@
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
 
 export const Input = ({
   id,
@@ -10,6 +10,9 @@ export const Input = ({
   startAdornment,
   finishAdornment,
   className,
+  multiline,
+  maxRows,
+  rows,
   ...restProps
 }) => {
   const [isFocused, setIsFocused] = useState(false);
@@ -32,12 +35,38 @@ export const Input = ({
     if (e.target.value) {
       setIsEmpty(false);
     }
+    if (multiline) {
+      e.target.style.height = 'auto';
+      if (maxRows) {
+        const getMaxHeight = (maxRows) => {
+          const rowHeight = 24;
+          const initialHeight = 40;
+          const maxScrollHeight = 40 + rowHeight * (maxRows - 1);
+          if (maxScrollHeight < initialHeight) {
+            return 40;
+          } else {
+            return maxScrollHeight;
+          }
+        };
+
+        if (e.target.scrollHeight <= getMaxHeight(maxRows)) {
+          e.target.style.height = `${e.target.scrollHeight}px`;
+        } else {
+          e.target.style.height = `${getMaxHeight(maxRows)}px`;
+          e.target.style.overflowY = 'auto';
+        }
+      } else {
+        e.target.style.height = `${e.target.scrollHeight}px`;
+      }
+    }
     onChange(e);
   };
 
   useEffect(() => {
     setIsEmpty(!(restProps?.value || restProps?.defaultValue));
   }, [restProps?.value, restProps?.defaultValue]);
+
+  const inputComponent = multiline ? 'textarea' : 'input';
 
   return (
     <div className={`relative ${className} `}>
@@ -51,7 +80,7 @@ export const Input = ({
             ? `-top-2 text-xs bg-white px-1 ${
                 Boolean(startAdornment) && '-translate-x-7'
               }`
-            : 'top-1/2 -translate-y-1/2'
+            : 'top-5 -translate-y-1/2'
         }
         ${isFocused ? 'text-light-text-main' : 'text-light-text-third'}
           `}
@@ -68,21 +97,27 @@ export const Input = ({
             {startAdornment}
           </div>
         )}
-        <input
-          id={id}
-          type={type}
-          className={`w-full border rounded-md py-2 px-3 
+        {React.createElement(inputComponent, {
+          id,
+          type,
+          className: `w-full border rounded-md py-2 px-3 
           ${Boolean(startAdornment) ? 'pl-10' : 'pl-3'}
           ${Boolean(finishAdornment) ? 'pr-10' : 'pr-3'}
           focus:outline-none focus:border-light-text-main text-black ${
             isFocused && 'border-light-text-main'
-          }`}
-          onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          placeholder={isFocused ? placeholder : ''}
-          {...restProps}
-        />
+          }`,
+          onChange: handleChange,
+          onFocus: handleFocus,
+          onBlur: handleBlur,
+          placeholder: isFocused ? placeholder : '',
+          style: {
+            resize: 'none',
+            overflowY: 'hidden',
+            maxHeight: 'none',
+          },
+          ...(rows && { rows }),
+          ...restProps,
+        })}
         {finishAdornment && (
           <div
             className={`absolute inset-y-0 right-0 pr-3 flex items-center ${
@@ -106,4 +141,7 @@ Input.propTypes = {
   className: PropTypes.string,
   startAdornment: PropTypes.node,
   finishAdornment: PropTypes.node,
+  multiline: PropTypes.bool,
+  maxRows: PropTypes.number,
+  rows: PropTypes.number,
 };

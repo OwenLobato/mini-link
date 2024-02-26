@@ -169,6 +169,7 @@ export const SaveLink = ({ isEditMode = false }) => {
               onChange={handleLinkData}
               value={linkData.originalLink}
               className='w-full'
+              multiline
             />
             <Input
               id='description'
@@ -177,6 +178,9 @@ export const SaveLink = ({ isEditMode = false }) => {
               onChange={handleLinkData}
               value={linkData.description}
               className='w-full'
+              multiline
+              rows={3}
+              maxRows={5}
             />
 
             <div className='flex flex-col gap-2'>
@@ -188,9 +192,7 @@ export const SaveLink = ({ isEditMode = false }) => {
               <Button
                 variant='outlined'
                 text='Cancel'
-                className={
-                  'border-light-alert text-light-alert hover:bg-red-50'
-                }
+                className={'border-red-500 text-red-500 hover:bg-red-50'}
                 onClick={handleCancel}
               />
             </div>
