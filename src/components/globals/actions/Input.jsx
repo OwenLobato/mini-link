@@ -43,13 +43,13 @@ export const Input = ({
     <div className={`relative ${className} `}>
       <label
         htmlFor={id}
-        className={`absolute left-${
-          startAdornment ? '10' : '3'
+        className={`absolute ${
+          Boolean(startAdornment) ? 'left-10' : 'left-3'
         } transition-all duration-300 z-10
         ${
           isFocused || !isEmpty
             ? `-top-2 text-xs bg-white px-1 ${
-                startAdornment && '-translate-x-7'
+                Boolean(startAdornment) && '-translate-x-7'
               }`
             : 'top-1/2 -translate-y-1/2'
         }
@@ -71,11 +71,10 @@ export const Input = ({
         <input
           id={id}
           type={type}
-          className={`w-full border rounded-md py-2 px-3 pl-${
-            startAdornment ? '10' : '3'
-          } pr-${
-            finishAdornment ? '10' : '3'
-          } focus:outline-none focus:border-light-text-main text-black ${
+          className={`w-full border rounded-md py-2 px-3 
+          ${Boolean(startAdornment) ? 'pl-10' : 'pl-3'}
+          ${Boolean(finishAdornment) ? 'pr-10' : 'pr-3'}
+          focus:outline-none focus:border-light-text-main text-black ${
             isFocused && 'border-light-text-main'
           }`}
           onChange={handleChange}
