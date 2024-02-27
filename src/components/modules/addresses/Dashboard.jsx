@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAddresses from '../../../hooks/useAddresses';
 import { LinkCard } from '../../modules';
-import { Button, Input, Modal, MessageOnModal } from '../../globals';
+import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -12,6 +12,7 @@ export const Dashboard = () => {
     Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [allLinks, setAllLinks] = useState([]);
   // Filter
@@ -101,6 +102,8 @@ export const Dashboard = () => {
   }, [startDate, endDate]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     getAddressByKey()
       .then((res) => {
         setAllLinks(res.data.data);
@@ -113,6 +116,9 @@ export const Dashboard = () => {
             message={'Please, try again later'}
           />
         );
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -138,95 +144,101 @@ export const Dashboard = () => {
 
   return (
     <>
-      <div className='relative w-full flex flex-col justify-start items-center'>
-        <div className='w-full flex justify-between mt-6 mb-10'>
-          <span className='w-1/3'></span>
-          <h1 className='w-1/3 text-center text-3xl font-bold text-light-text-main'>
-            Dashboard
-          </h1>
-          <div className='w-1/3 flex items-center justify-end'>
-            <Button
-              icon={<i className='fa-solid fa-plus' />}
-              text='Add link'
-              onClick={handleAddLink}
-            />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className='relative w-full flex flex-col justify-start items-center'>
+          <div className='w-full flex justify-between mt-6 mb-10'>
+            <span className='w-1/3'></span>
+            <h1 className='w-1/3 text-center text-3xl font-bold text-light-text-main'>
+              Dashboard
+            </h1>
+            <div className='w-1/3 flex items-center justify-end'>
+              <Button
+                icon={<i className='fa-solid fa-plus' />}
+                text='Add link'
+                onClick={handleAddLink}
+              />
+            </div>
           </div>
-        </div>
 
-        <div className='w-full mb-5'>
-          <form
-            onSubmit={handleSubmit}
-            className='flex flex-col md:flex-row w-full justify-between items-center gap-1 md:gap-2'
-          >
-            {filterParam === 'createdAt' ? (
-              <div className='w-full md:w-10/12 flex flex-row justify-center md:justify-end items-center space-x-4'>
-                <DatePicker
-                  placeholderText='Start date'
-                  selected={startDate}
-                  onChange={(date) => {
-                    setStartDate(date);
-                  }}
-                  className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+          <div className='w-full mb-5'>
+            <form
+              onSubmit={handleSubmit}
+              className='flex flex-col md:flex-row w-full justify-between items-center gap-1 md:gap-2'
+            >
+              {filterParam === 'createdAt' ? (
+                <div className='w-full md:w-10/12 flex flex-row justify-center md:justify-end items-center space-x-4'>
+                  <DatePicker
+                    placeholderText='Start date'
+                    selected={startDate}
+                    onChange={(date) => {
+                      setStartDate(date);
+                    }}
+                    className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+                  />
+                  <DatePicker
+                    placeholderText='End date'
+                    selected={endDate}
+                    onChange={(date) => {
+                      setEndDate(date);
+                    }}
+                    className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+                  />
+                </div>
+              ) : (
+                <Input
+                  id='search'
+                  type='text'
+                  label={`Search link by ${filterParam}`}
+                  placeholder={'Type to search'}
+                  onChange={handleSearchData}
+                  value={searchData}
+                  startAdornment={
+                    <i className='fa-solid fa-magnifying-glass' />
+                  }
+                  className={'w-full md:w-10/12'}
                 />
-                <DatePicker
-                  placeholderText='End date'
-                  selected={endDate}
-                  onChange={(date) => {
-                    setEndDate(date);
-                  }}
-                  className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+              )}
+              <div className='flex justify-center items-center gap-1 w-full md:w-2/12'>
+                <Button
+                  variant='outlined'
+                  icon={<i className='fa-solid fa-filter' />}
+                  text='Filter'
+                  onClick={handleFilter}
+                />
+                <Button
+                  variant='outlined'
+                  icon={<i className='fa-solid fa-sort' />}
+                  text='Sort'
+                  onClick={handleSort}
                 />
               </div>
-            ) : (
-              <Input
-                id='search'
-                type='text'
-                label={`Search link by ${filterParam}`}
-                placeholder={'Type to search'}
-                onChange={handleSearchData}
-                value={searchData}
-                startAdornment={<i className='fa-solid fa-magnifying-glass' />}
-                className={'w-full md:w-10/12'}
-              />
-            )}
-            <div className='flex justify-center items-center gap-1 w-full md:w-2/12'>
-              <Button
-                variant='outlined'
-                icon={<i className='fa-solid fa-filter' />}
-                text='Filter'
-                onClick={handleFilter}
-              />
-              <Button
-                variant='outlined'
-                icon={<i className='fa-solid fa-sort' />}
-                text='Sort'
-                onClick={handleSort}
-              />
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
 
-        <div className='flex justify-center items-start overflow-x-auto scroll-premium w-full absolute top-40 bottom-0 p-2 md:p-4 mt-8 md:mt-0'>
-          {linksToShow.length ? (
-            <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
-              {linksToShow.map((link, index) => (
-                <LinkCard key={index} data={link} />
-              ))}
-            </div>
-          ) : (
-            <div className='flex flex-col justify-center items-center mt-10'>
-              <img
-                src='assests/svgs/emptyData.svg'
-                alt='Empty data'
-                className='w-72 mb-6'
-              />
-              <p className='text-light-text-third'>
-                You don't have any links added yet.
-              </p>
-            </div>
-          )}
+          <div className='flex justify-center items-start overflow-x-auto scroll-premium w-full absolute top-40 bottom-0 p-2 md:p-4 mt-8 md:mt-0'>
+            {linksToShow.length ? (
+              <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
+                {linksToShow.map((link, index) => (
+                  <LinkCard key={index} data={link} />
+                ))}
+              </div>
+            ) : (
+              <div className='flex flex-col justify-center items-center mt-10'>
+                <img
+                  src='assests/svgs/emptyData.svg'
+                  alt='Empty data'
+                  className='w-72 mb-6'
+                />
+                <p className='text-light-text-third'>
+                  You don't have any links added yet.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <Modal isOpen={modalContent !== null} onClose={closeModal}>
         {modalContent}

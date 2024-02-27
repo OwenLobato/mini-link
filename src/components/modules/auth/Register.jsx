@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import { validateForm } from '../../../helpers/formActions';
-import { Button, Input, Modal, MessageOnModal } from '../../globals';
+import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ export const Register = () => {
   const [registerData, setRegisterData] = useState(initialRegisterData);
   const [passwordType, setPasswordType] = useState('password');
   const [modalContent, setModalContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -65,6 +66,7 @@ export const Register = () => {
     ) {
       const { name, email, password, confirmPassword } = registerData;
 
+      setIsLoading(true);
       register(name, email, password, confirmPassword)
         .then((res) => {
           console.log(res.data.message);
@@ -79,12 +81,17 @@ export const Register = () => {
               message={'Please try again later'}
             />
           );
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
 
   return (
     <>
+      {isLoading && <Loader />}
+
       <div className='flex flex-col md:flex-row-reverse justify-between items-start w-full h-screen'>
         <div className='flex items-center justify-center bg-light-bg-main w-full md:w-1/2 h-1/3 md:h-screen'>
           <img src={'assests/images/Logo.png'} alt='Logo' className='w-11/12' />

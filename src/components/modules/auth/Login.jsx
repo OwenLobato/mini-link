@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import { validateForm } from '../../../helpers/formActions';
-import { Button, Input, Modal, MessageOnModal } from '../../globals';
+import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -15,6 +15,7 @@ export const Login = () => {
   const [loginData, setLoginData] = useState(initialLoginData);
   const [passwordType, setPasswordType] = useState('password');
   const [modalContent, setModalContent] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -48,6 +49,7 @@ export const Login = () => {
     ) {
       const { email, password } = loginData;
 
+      setIsLoading(true);
       login(email, password)
         .then((res) => {
           localStorage.setItem('authToken', res.data.data.token);
@@ -62,12 +64,17 @@ export const Login = () => {
               message={'Check your email and password'}
             />
           );
+        })
+        .finally(() => {
+          setIsLoading(false);
         });
     }
   };
 
   return (
     <>
+      {isLoading && <Loader />}
+
       <div className='flex flex-col md:flex-row justify-between items-start w-full h-screen'>
         <div className='flex items-center justify-center bg-light-bg-main w-full md:w-1/2 h-1/3 md:h-screen'>
           <img src={'assests/images/Logo.png'} alt='Logo' className='w-11/12' />
