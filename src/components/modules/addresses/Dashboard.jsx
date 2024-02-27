@@ -12,14 +12,18 @@ export const Dashboard = () => {
     Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
   });
 
+  const [modalContent, setModalContent] = useState(null);
+  const [allLinks, setAllLinks] = useState([]);
+  // Filter
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
-  const [allLinks, setAllLinks] = useState([]);
-  const [modalContent, setModalContent] = useState(null);
   const [filterParam, setFilterParam] = useState('name');
   const [filteredLinks, setFilteredLinks] = useState(allLinks);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  // Sort
+  const [sortParam, setSortParam] = useState('name');
+  const [sortDirection, setSortDirection] = useState('default');
 
   const openModal = (content) => {
     setModalContent(content);
@@ -80,7 +84,14 @@ export const Dashboard = () => {
   };
 
   const handleSort = () => {
-    console.log('sort...');
+    openModal(
+      <SortOptions
+        sortParam={sortParam}
+        setSortParam={setSortParam}
+        sortDirection={sortDirection}
+        setSortDirection={setSortDirection}
+      />
+    );
   };
 
   useEffect(() => {
@@ -111,6 +122,19 @@ export const Dashboard = () => {
   } else {
     linksToShow = allLinks.length ? allLinks : [];
   }
+
+  linksToShow = [...linksToShow].sort((a, b) => {
+    if (sortDirection === 'asc') {
+      if (sortParam === 'visitCount') return a[sortParam] - b[sortParam];
+      return a[sortParam].localeCompare(b[sortParam]);
+    }
+    if (sortDirection === 'desc') {
+      if (sortParam === 'visitCount') return b[sortParam] - a[sortParam];
+      return b[sortParam].localeCompare(a[sortParam]);
+    } else {
+      return [...linksToShow];
+    }
+  });
 
   return (
     <>
@@ -245,6 +269,80 @@ const FilterOptions = ({
             onClick={() => handleSelect(option.value)}
             className={`cursor-pointer transition-colors duration-300 ease-in-out ${
               filterParam === option.value
+                ? 'font-semibold text-blue-600'
+                : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            {option.label}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+const SortOptions = ({
+  sortParam,
+  setSortParam,
+  sortDirection,
+  setSortDirection,
+}) => {
+  const [sortDirectionLocal, setSortDirectionLocal] = useState(sortDirection);
+  const [sortParamLocal, setSortParamLocal] = useState(sortParam);
+
+  const options = [
+    { value: 'name', label: 'Name' },
+    { value: 'urlCode', label: 'URL Code' },
+    { value: 'originalLink', label: 'Original Link' },
+    { value: 'visitCount', label: 'Views' },
+    { value: 'createdAt', label: 'Date' },
+  ];
+
+  const handleSelect = (value) => {
+    setSortParam(value);
+    setSortParamLocal(value);
+  };
+
+  const handleSortDirection = () => {
+    const nextDirection =
+      sortDirectionLocal === 'default'
+        ? 'asc'
+        : sortDirectionLocal === 'asc'
+        ? 'desc'
+        : 'default';
+    setSortDirectionLocal(nextDirection);
+    setSortDirection(nextDirection);
+  };
+
+  return (
+    <div className='text-center flex flex-col justify-center'>
+      <h1 className='text-2xl font-semibold text-gray-800'>Order by</h1>
+      <p className='text-gray-600 mb-2'>Select the order direction</p>
+      <Button
+        text={sortDirectionLocal.toUpperCase()}
+        icon={
+          <i
+            className={`fa-solid fa-sort${
+              sortDirectionLocal === 'asc'
+                ? '-up'
+                : sortDirectionLocal === 'desc'
+                ? '-down'
+                : ''
+            }`}
+          />
+        }
+        onClick={handleSortDirection}
+        className={`border rounded-lg p-2 flex justify-center items-center`}
+      />
+
+      <p className='text-gray-600 my-2'>Select the order parameter</p>
+      <ul className='border rounded-lg p-2 space-y-1'>
+        {options.map((option) => (
+          <li
+            key={option.value}
+            onClick={() => handleSelect(option.value)}
+            className={`cursor-pointer transition-colors duration-300 ease-in-out ${
+              sortParamLocal === option.value
                 ? 'font-semibold text-blue-600'
                 : 'text-gray-700 hover:text-blue-600'
             }`}
