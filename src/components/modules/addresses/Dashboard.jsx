@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import useAddresses from '../../../hooks/useAddresses';
 import { LinkCard } from '../../modules';
 import { Button, Input, Modal, MessageOnModal } from '../../globals';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
@@ -12,11 +14,12 @@ export const Dashboard = () => {
 
   const initialSearchData = '';
   const [searchData, setSearchData] = useState(initialSearchData);
-  const [filterParam, setFilterParam] = useState('name');
   const [allLinks, setAllLinks] = useState([]);
   const [modalContent, setModalContent] = useState(null);
-
-  console.log(`🚀 allLinks:`, allLinks);
+  const [filterParam, setFilterParam] = useState('name');
+  const [filteredLinks, setFilteredLinks] = useState(allLinks);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
   const openModal = (content) => {
     setModalContent(content);
@@ -33,20 +36,58 @@ export const Dashboard = () => {
   const handleSearchData = (e) => {
     const { value } = e.target;
     setSearchData(value);
+
+    if (value.length >= 1) handleSubmit(e);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Serch data:', searchData);
+    if (e) e.preventDefault();
+
+    let filteredList = allLinks;
+
+    if (filterParam === 'createdAt' && startDate && endDate) {
+      filteredList = allLinks.filter((link) => {
+        const linkDate = new Date(link.createdAt);
+
+        const startOfDay = new Date(startDate);
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(endDate);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        return linkDate >= startOfDay && linkDate <= endOfDay;
+      });
+    } else {
+      filteredList = allLinks.filter((link) =>
+        link[filterParam].toLowerCase().includes(searchData.toLowerCase())
+      );
+    }
+
+    setFilteredLinks(filteredList);
   };
 
   const handleFilter = () => {
-    console.log('Filter...');
+    openModal(
+      <FilterOptions
+        setSearchData={setSearchData}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        filterParam={filterParam}
+        setFilterParam={setFilterParam}
+        closeModal={closeModal}
+      />
+    );
   };
 
   const handleSort = () => {
     console.log('sort...');
   };
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      handleSubmit();
+    }
+  }, [startDate, endDate]);
 
   useEffect(() => {
     getAddressByKey()
@@ -63,6 +104,13 @@ export const Dashboard = () => {
         );
       });
   }, []);
+
+  let linksToShow = [];
+  if (searchData.length >= 1 || (startDate && endDate)) {
+    linksToShow = filteredLinks.length ? filteredLinks : [];
+  } else {
+    linksToShow = allLinks.length ? allLinks : [];
+  }
 
   return (
     <>
@@ -86,16 +134,37 @@ export const Dashboard = () => {
             onSubmit={handleSubmit}
             className='flex flex-col md:flex-row w-full justify-between items-center gap-1 md:gap-2'
           >
-            <Input
-              id='search'
-              type='text'
-              label='Search link'
-              placeholder={'Type your link to search'}
-              onChange={handleSearchData}
-              value={searchData}
-              startAdornment={<i className='fa-solid fa-magnifying-glass' />}
-              className={'w-full md:w-10/12'}
-            />
+            {filterParam === 'createdAt' ? (
+              <div className='w-full md:w-10/12 flex flex-row justify-center md:justify-end items-center space-x-4'>
+                <DatePicker
+                  placeholderText='Start date'
+                  selected={startDate}
+                  onChange={(date) => {
+                    setStartDate(date);
+                  }}
+                  className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+                />
+                <DatePicker
+                  placeholderText='End date'
+                  selected={endDate}
+                  onChange={(date) => {
+                    setEndDate(date);
+                  }}
+                  className='border border-light-text-third w-40 text-light-text-third rounded-md px-3 py-2'
+                />
+              </div>
+            ) : (
+              <Input
+                id='search'
+                type='text'
+                label={`Search link by ${filterParam}`}
+                placeholder={'Type to search'}
+                onChange={handleSearchData}
+                value={searchData}
+                startAdornment={<i className='fa-solid fa-magnifying-glass' />}
+                className={'w-full md:w-10/12'}
+              />
+            )}
             <div className='flex justify-center items-center gap-1 w-full md:w-2/12'>
               <Button
                 variant='outlined'
@@ -114,9 +183,9 @@ export const Dashboard = () => {
         </div>
 
         <div className='flex justify-center items-start overflow-x-auto scroll-premium w-full absolute top-40 bottom-0 p-2 md:p-4 mt-8 md:mt-0'>
-          {allLinks.length ? (
+          {linksToShow.length ? (
             <div className='w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4'>
-              {allLinks.map((link, index) => (
+              {linksToShow.map((link, index) => (
                 <LinkCard key={index} data={link} />
               ))}
             </div>
@@ -139,5 +208,51 @@ export const Dashboard = () => {
         {modalContent}
       </Modal>
     </>
+  );
+};
+
+const FilterOptions = ({
+  setSearchData,
+  setStartDate,
+  setEndDate,
+  filterParam,
+  setFilterParam,
+  closeModal,
+}) => {
+  const options = [
+    { value: 'name', label: 'Name' },
+    { value: 'urlCode', label: 'URL Code' },
+    { value: 'originalLink', label: 'Original Link' },
+    { value: 'createdAt', label: 'Date' },
+  ];
+
+  const handleSelect = (value) => {
+    setFilterParam(value);
+    setSearchData('');
+    setStartDate(null);
+    setEndDate(null);
+    closeModal();
+  };
+
+  return (
+    <div className='text-center'>
+      <h1 className='text-2xl font-semibold text-gray-800'>Filter by</h1>
+      <p className='text-gray-600 mb-4'>Select the filter parameter</p>
+      <ul className='border rounded-lg p-2 space-y-1'>
+        {options.map((option) => (
+          <li
+            key={option.value}
+            onClick={() => handleSelect(option.value)}
+            className={`cursor-pointer transition-colors duration-300 ease-in-out ${
+              filterParam === option.value
+                ? 'font-semibold text-blue-600'
+                : 'text-gray-700 hover:text-blue-600'
+            }`}
+          >
+            {option.label}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
