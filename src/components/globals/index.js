@@ -5,3 +5,4 @@ export * from './actions/Button';
 export * from './actions/Input';
 export * from './actions/Modal';
 export * from './LinkRedirect';
+export * from './Loader';

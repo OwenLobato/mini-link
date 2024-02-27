@@ -2,21 +2,5 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ------ Scroll Premium ------  */
-
-.scroll-premium::-webkit-scrollbar {
-  width: 10px;
-}
-
-.scroll-premium::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-}
-
-.scroll-premium::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 5px;
-}
-
-.scroll-premium::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
-}
+@import "./scroll.css";
+@import "./loader.css";
