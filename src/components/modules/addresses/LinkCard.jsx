@@ -46,7 +46,7 @@ export const LinkCard = ({ data }) => {
   };
 
   const handleRedirect = () => {
-    window.open(`/s/${urlCode}`, '_blank');
+    window.open(`/#/s/${urlCode}`, '_blank');
   };
 
   const handleCopy = () => {

@@ -156,12 +156,14 @@ export const Register = () => {
           </form>
           <p>
             Already have an account?
-            <a
-              href='/'
+            <button
+              onClick={() => {
+                navigate('/');
+              }}
               className='text-light-text-main hover:text-light-btn-hover ml-2 font-bold'
             >
               Sign In
-            </a>
+            </button>
           </p>
         </div>
       </div>

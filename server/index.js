@@ -19,8 +19,9 @@ export const ORIGIN_PATH =
     : process.env.ORIGIN;
 
 const app = express();
-app.use(cors({ credentials: true, origin: ORIGIN_PATH }));
+
 app.use(express.json());
+app.use(cors({ credentials: true, origin: ORIGIN_PATH }));
 
 // ROUTES
 authRoutes(app);
