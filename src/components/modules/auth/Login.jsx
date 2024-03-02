@@ -119,14 +119,14 @@ export const Login = () => {
           </form>
           <p>
             No account yet?
-            <buton
+            <button
               onClick={() => {
                 navigate('/register');
               }}
               className='text-light-text-main hover:text-light-btn-hover ml-2 font-bold'
             >
               Sign Up
-            </buton>
+            </button>
           </p>
         </div>
       </div>
