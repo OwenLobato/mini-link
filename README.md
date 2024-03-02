@@ -107,58 +107,54 @@ The deployed back end is accessible at: [https://mini-link-api.onrender.com](htt
 ## Screen Examples
 
 - **Sign In**: [Screenshot of the sign in form].  
-  ![Login]()
-  ![Responsive Login]()
+  ![Login](https://github.com/OwenLobato/mini-link/assets/74989360/864f58d3-4429-42b1-abdc-d13adf70db60)
+  ![Responsive Login](https://github.com/OwenLobato/mini-link/assets/74989360/c1479528-553c-4cb3-bdcd-9dd799178aec)
 
 - **Sign Up**: [Screenshot of the sign up form].  
-  ![Register]()
-  ![Responsive Register]()
-
-- **Nav bar**: [Screenshot of the navbar].  
-  ![NavBar]()
-  ![Responsive NavBar]()
+  ![Register](https://github.com/OwenLobato/mini-link/assets/74989360/c29aa014-87c0-4937-b61e-e7d3ed716197)
+  ![Responsive Register](https://github.com/OwenLobato/mini-link/assets/74989360/0fe76d88-52e9-4069-9c69-115284cecf7f)
 
 - **Empty dashboard**: [Screenshot of the empty user dashboard].  
-  ![EmptyDashboard]()
-  ![Responsive EmptyDashboard]()
+  ![EmptyDashboard](https://github.com/OwenLobato/mini-link/assets/74989360/a6283714-c1ea-4a13-b337-2bc2d04ddbb4)
+  ![Responsive EmptyDashboard](https://github.com/OwenLobato/mini-link/assets/74989360/6cad7763-d512-4a45-9e2a-5b09893875bc)
 
 - **Dashboard**: [Screenshot of the user dashboard].  
-  ![Dashboard]()
-  ![Responsive Dashboard]()
+  ![Dashboard](https://github.com/OwenLobato/mini-link/assets/74989360/4d273056-8cd7-4e82-a737-b92071e400c9)
+  ![Responsive Dashboard](https://github.com/OwenLobato/mini-link/assets/74989360/9a09d6b0-a076-4226-bd4f-f3b64f4f3bc9)
 
 - **Link options**: [Screenshot of the modal of options for the link].  
-  ![LinkOptions]()
+  ![LinkOptions](https://github.com/OwenLobato/mini-link/assets/74989360/1ab8f552-2b1e-4fb6-9b5a-84785044b47e)
 
 - **Link QR Code**: [Screenshot of the QR code of the mini link].  
-  ![QrCode]()
+  ![QrCode](https://github.com/OwenLobato/mini-link/assets/74989360/0e76baf5-4dec-455a-a8fc-f73c8dd69177)
 
 - **Add/Edit link**: [Screenshot of the form to add or edit a url (mini link)].  
-  ![SaveLink]()
-  ![Responsive SaveLink]()
+  ![SaveLink](https://github.com/OwenLobato/mini-link/assets/74989360/a39d937d-9b50-4fe2-aac4-eee4577b9e40)
+  ![Responsive SaveLink](https://github.com/OwenLobato/mini-link/assets/74989360/3991a218-3dd3-4bba-a305-c916b3668996)
 
 - **Filter option**: [Screenshot of the modal for filter option].  
-  ![Filter Modal]()
+  ![Filter Modal](https://github.com/OwenLobato/mini-link/assets/74989360/8d2b2cc5-10a8-4f6d-abae-e5fea94af7a8)
 
 - **Sort option**: [Screenshot of the modal for sort option].  
-  ![Sort Modal]()
+  ![Sort Modal](https://github.com/OwenLobato/mini-link/assets/74989360/58e385d6-6e4c-49d9-8259-c37badd72f3c)
 
 - **Profile**: [Screenshot of the form for the user profile].  
-  ![Profile]()
-  ![Responsive Profile]()
+  ![Profile](https://github.com/OwenLobato/mini-link/assets/74989360/fb422ec8-43e9-46a6-bed1-df7bb657ede0)
+  ![Responsive Profile](https://github.com/OwenLobato/mini-link/assets/74989360/c15bc5c5-6417-4831-8f4c-c9375a1db3c2)
 
 - **Success redirect page**: [Screenshot of the page where is fetching the original link to redirect it].  
-  ![RedirectPage]()
+  ![RedirectPage](https://github.com/OwenLobato/mini-link/assets/74989360/90e96ca9-f53a-40a6-990d-e8302e53b988)
 
 - **Error redirect page**: [Screenshot of the page where there's an error on fetching the original link to redirect it].  
-  ![Error RedirectPage]()
+  ![Error RedirectPage](https://github.com/OwenLobato/mini-link/assets/74989360/b1733d80-df29-428f-8273-509554f68f2a)
 
 - **Page Not Found**: [Screenshot of the notice indicating that the selected route doesn't exist].  
-  ![PageNotFound]()
+  ![PageNotFound](https://github.com/OwenLobato/mini-link/assets/74989360/f2f1a54f-73b5-4ce0-9375-ece2f050f57a)
 
 - **Loader**: [Screenshot of loader].  
-  ![Loader]()
+  ![Loader](https://github.com/OwenLobato/mini-link/assets/74989360/8265c9cf-c979-4f91-a510-4fe4a25b7989)
 
 - **Alerts**: [Screenshot of alerts].  
-  ![Success]()
-  ![Warning]()
-  ![Error]()
+  ![Success](https://github.com/OwenLobato/mini-link/assets/74989360/8689b028-6c11-4dec-85bf-e774d648de7c)
+  ![Warning](https://github.com/OwenLobato/mini-link/assets/74989360/adacd3a6-54c8-4be3-b579-ccd9b775c425)
+  ![Error](https://github.com/OwenLobato/mini-link/assets/74989360/afd2c422-acc9-42ca-99ca-217812a323b7)
