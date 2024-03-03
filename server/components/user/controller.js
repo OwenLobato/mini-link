@@ -1,4 +1,5 @@
-import { findUserBy, getAllUsers, modifyUser } from './store.js';
+import { findUserBy, modifyUser } from './store.js';
+import { createHash } from '../helpers/hashing.js';
 import { findAddressBy } from '../address/store.js';
 import { customError } from '../../network/response.js';
 
@@ -51,7 +52,7 @@ export const editUser = (name, email, password, userId) => {
 
     let updateFields = { name, email };
     if (password) {
-      updateFields.password = password;
+      updateFields.password = createHash(password);
     }
 
     try {
