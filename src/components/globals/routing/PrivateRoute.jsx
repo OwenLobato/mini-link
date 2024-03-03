@@ -5,11 +5,14 @@ import { useUserContext } from '../../../contexts/userContext';
 export const PrivateRoute = (props) => {
   const navigate = useNavigate();
 
-  const { getAuthToken } = useUserContext();
+  const { getAuthToken, isExpiredAuthToken, removeAuthToken } =
+    useUserContext();
   const authToken = getAuthToken();
+  const isExpired = isExpiredAuthToken();
 
   useEffect(() => {
-    if (!authToken) {
+    if (!authToken || isExpired) {
+      removeAuthToken();
       navigate('/');
     }
   }, [authToken]);

@@ -1,5 +1,16 @@
 import { createContext, useState, useEffect, useContext } from 'react';
+import { jwtDecode } from 'jwt-decode';
 import useUsers from '../hooks/useUsers';
+
+const getTimestampsDate = (timestamp) => {
+  const date = new Date(timestamp * 1000);
+  return date.toLocaleString();
+};
+
+const getNowDate = () => {
+  const now = new Date();
+  return now.toLocaleString();
+};
 
 const UserContextProvider = createContext();
 
@@ -10,6 +21,20 @@ export const UserContext = ({ children }) => {
     window.localStorage.setItem('authToken', token);
 
   const removeAuthToken = () => window.localStorage.removeItem('authToken');
+
+  const isExpiredAuthToken = () => {
+    try {
+      const decodedToken = jwtDecode(getAuthToken());
+
+      const NOW = getNowDate();
+      const EXP = getTimestampsDate(decodedToken.exp);
+      if (NOW > EXP) return true;
+
+      return false;
+    } catch (error) {
+      return true;
+    }
+  };
 
   const { getDashboardData } = useUsers({
     Authorization: `Bearer ${getAuthToken()}`,
@@ -24,7 +49,7 @@ export const UserContext = ({ children }) => {
   const [userData, setUserData] = useState(initialUserData);
 
   useEffect(() => {
-    if (getAuthToken()) {
+    if (getAuthToken() && !isExpiredAuthToken()) {
       getDashboardData()
         .then((res) => {
           setUserData(res.data.data);
@@ -32,6 +57,8 @@ export const UserContext = ({ children }) => {
         .catch((err) => {
           console.log(err.response.data.message);
         });
+    } else {
+      removeAuthToken();
     }
   }, []);
 
@@ -43,6 +70,7 @@ export const UserContext = ({ children }) => {
         getAuthToken,
         setAuthToken,
         removeAuthToken,
+        isExpiredAuthToken,
       }}
     >
       {children}
