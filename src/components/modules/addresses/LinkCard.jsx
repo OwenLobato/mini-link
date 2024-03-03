@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import QRCode from 'react-qr-code';
+import { useUserContext } from '../../../contexts/userContext';
 import { miniLinkPath } from '../../../helpers/originPaths';
 import useAddresses from '../../../hooks/useAddresses';
 import { Modal, MessageOnModal, Button } from '../../globals';
@@ -16,8 +17,12 @@ export const LinkCard = ({ data }) => {
   } = data;
 
   const navigate = useNavigate();
+
+  const { getAuthToken } = useUserContext();
+  const authToken = getAuthToken();
+
   const { deleteAddress } = useAddresses({
-    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+    Authorization: `Bearer ${authToken}`,
   });
 
   const [modalContent, setModalContent] = useState(null);

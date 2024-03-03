@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import QRCode from 'react-qr-code';
+import { useUserContext } from '../../../contexts/userContext';
 import { miniLinkPath } from '../../../helpers/originPaths';
 import {
   validateForm,
@@ -11,10 +12,14 @@ import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 
 export const SaveLink = ({ isEditMode = false }) => {
   const navigate = useNavigate();
+
+  const { getAuthToken } = useUserContext();
+  const authToken = getAuthToken();
+
   const { id } = useParams();
 
   const { createAddress, editAddress, getAddressByKey } = useAddresses({
-    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+    Authorization: `Bearer ${authToken}`,
   });
 
   const initialLinkData = {

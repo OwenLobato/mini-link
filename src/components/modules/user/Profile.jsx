@@ -7,9 +7,12 @@ import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 
 export const Profile = () => {
   const navigate = useNavigate();
-  const { setUserData } = useUserContext();
+
+  const { getAuthToken, removeAuthToken, setUserData } = useUserContext();
+  const authToken = getAuthToken();
+
   const { editUser, getUser } = useUsers({
-    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+    Authorization: `Bearer ${authToken}`,
   });
 
   const initialProfileData = {
@@ -35,7 +38,7 @@ export const Profile = () => {
   };
 
   const handleLogout = () => {
-    window.localStorage.removeItem('authToken');
+    removeAuthToken();
     setUserData({
       _id: '',
       name: '',

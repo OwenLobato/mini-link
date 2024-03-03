@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../../contexts/userContext';
 import useAddresses from '../../../hooks/useAddresses';
 import { LinkCard } from '../../modules';
 import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
@@ -8,8 +9,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+
+  const { getAuthToken } = useUserContext();
+  const authToken = getAuthToken();
+
   const { getAddressByKey } = useAddresses({
-    Authorization: `Bearer ${window.localStorage.getItem('authToken')}`,
+    Authorization: `Bearer ${authToken}`,
   });
 
   const [isLoading, setIsLoading] = useState(false);

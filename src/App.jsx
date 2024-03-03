@@ -24,32 +24,32 @@ const AppLayout = ({ children }) => {
 
 const App = () => {
   return (
-    <Router>
-      <Routes>
-        {/* PUBLIC ROUTES*/}
-        {PublicAppRoutes.map(({ path, component }, index) => (
-          <Route
-            key={index}
-            path={path}
-            element={<PublicLayout>{component}</PublicLayout>}
-          />
-        ))}
-        {/* PRIVATE ROUTES */}
-        {AppRoutes.map(({ path, component }, index) => (
-          <Route
-            key={index}
-            path={path}
-            element={
-              <UserContext>
+    <UserContext>
+      <Router>
+        <Routes>
+          {/* PUBLIC ROUTES*/}
+          {PublicAppRoutes.map(({ path, component }, index) => (
+            <Route
+              key={index}
+              path={path}
+              element={<PublicLayout>{component}</PublicLayout>}
+            />
+          ))}
+          {/* PRIVATE ROUTES */}
+          {AppRoutes.map(({ path, component }, index) => (
+            <Route
+              key={index}
+              path={path}
+              element={
                 <AppLayout>
                   <PrivateRoute>{component}</PrivateRoute>
                 </AppLayout>
-              </UserContext>
-            }
-          />
-        ))}
-      </Routes>
-    </Router>
+              }
+            />
+          ))}
+        </Routes>
+      </Router>
+    </UserContext>
   );
 };
 

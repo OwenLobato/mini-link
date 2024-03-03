@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useUserContext } from '../../contexts/userContext';
 
 export const NavBar = () => {
   const location = useLocation();
-  const authToken = localStorage.getItem('authToken');
+
+  const { getAuthToken } = useUserContext();
+  const authToken = getAuthToken();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

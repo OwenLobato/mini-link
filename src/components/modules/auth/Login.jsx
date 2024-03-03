@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../../../contexts/userContext';
 import useAuth from '../../../hooks/useAuth';
 import { validateForm } from '../../../helpers/formActions';
 import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 
 export const Login = () => {
   const navigate = useNavigate();
+
+  const { setAuthToken } = useUserContext();
+
   const { login } = useAuth();
 
   const initialLoginData = {
@@ -52,7 +56,7 @@ export const Login = () => {
       setIsLoading(true);
       login(email, password)
         .then((res) => {
-          localStorage.setItem('authToken', res.data.data.token);
+          setAuthToken(res.data.data.token);
           setLoginData(initialLoginData);
           navigate('/dashboard');
         })
