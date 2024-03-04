@@ -22,6 +22,14 @@ export const UserContext = ({ children }) => {
 
   const removeAuthToken = () => window.localStorage.removeItem('authToken');
 
+  const getRefreshToken = () => window.localStorage.getItem('refreshToken');
+
+  const setRefreshToken = (refreshToken) =>
+    window.localStorage.setItem('refreshToken', refreshToken);
+
+  const removeRefreshToken = () =>
+    window.localStorage.removeItem('refreshToken');
+
   const isExpiredAuthToken = () => {
     try {
       const decodedToken = jwtDecode(getAuthToken());
@@ -70,6 +78,9 @@ export const UserContext = ({ children }) => {
         getAuthToken,
         setAuthToken,
         removeAuthToken,
+        getRefreshToken,
+        setRefreshToken,
+        removeRefreshToken,
         isExpiredAuthToken,
       }}
     >

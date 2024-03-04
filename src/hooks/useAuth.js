@@ -17,9 +17,25 @@ const useAuth = (headers) => {
     });
   };
 
+  const refresh = async (refreshToken) => {
+    return await request('POST', `${authVersion}/refresh`, headers, {
+      data: { refreshToken },
+      api: false,
+    });
+  };
+
+  const logout = async (refreshToken) => {
+    return await request('DELETE', `${authVersion}/logout`, headers, {
+      data: { refreshToken },
+      api: false,
+    });
+  };
+
   return {
     login,
     register,
+    refresh,
+    logout,
   };
 };
 

@@ -8,7 +8,7 @@ import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 export const Login = () => {
   const navigate = useNavigate();
 
-  const { setAuthToken } = useUserContext();
+  const { setAuthToken, setRefreshToken } = useUserContext();
 
   const { login } = useAuth();
 
@@ -57,6 +57,7 @@ export const Login = () => {
       login(email, password)
         .then((res) => {
           setAuthToken(res.data.data.token);
+          setRefreshToken(res.data.data.refreshToken);
           setLoginData(initialLoginData);
           navigate('/dashboard');
         })

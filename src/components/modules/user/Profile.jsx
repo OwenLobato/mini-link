@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from '../../../contexts/userContext';
+import useAuth from '../../../hooks/useAuth';
 import useUsers from '../../../hooks/useUsers';
 import { validateForm } from '../../../helpers/formActions';
 import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
@@ -8,9 +9,16 @@ import { Button, Input, Modal, MessageOnModal, Loader } from '../../globals';
 export const Profile = () => {
   const navigate = useNavigate();
 
-  const { getAuthToken, removeAuthToken, setUserData } = useUserContext();
+  const {
+    getAuthToken,
+    getRefreshToken,
+    removeAuthToken,
+    removeRefreshToken,
+    setUserData,
+  } = useUserContext();
   const authToken = getAuthToken();
 
+  const { logout } = useAuth();
   const { editUser, getUser } = useUsers({
     Authorization: `Bearer ${authToken}`,
   });
@@ -38,14 +46,32 @@ export const Profile = () => {
   };
 
   const handleLogout = () => {
-    removeAuthToken();
-    setUserData({
-      _id: '',
-      name: '',
-      email: '',
-      links: [],
-    });
-    navigate('/');
+    setIsLoading(true);
+
+    logout(getRefreshToken())
+      .then(() => {
+        setUserData({
+          _id: '',
+          name: '',
+          email: '',
+          links: [],
+        });
+        removeAuthToken();
+        removeRefreshToken();
+        navigate('/');
+      })
+      .catch((err) => {
+        openModal(
+          <MessageOnModal
+            type={'error'}
+            title={err.response.data.message}
+            message={'Error  while logging out'}
+          />
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const handleProfileData = (e) => {
