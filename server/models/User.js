@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     minlength: 6,
     select: false,
   },
+  refreshToken: {
+    type: String,
+    required: false,
+    select: false,
+  },
 });
 
 const User = mongoose.model('user', userSchema);

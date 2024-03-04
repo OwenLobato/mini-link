@@ -6,9 +6,8 @@ import {
   getUserResponse,
   verifyToken,
 } from '../helpers/hashing.js';
+import { modifyUser } from '../user/store.js';
 import { customError } from '../../network/response.js';
-
-let refreshTokens = []; // TODO: Agregarlo  a BD
 
 export const login = (email, password) => {
   return new Promise(async (resolve, reject) => {
@@ -29,7 +28,8 @@ export const login = (email, password) => {
         user.email,
         true
       );
-      refreshTokens.push(refreshToken);
+
+      await modifyUser({ refreshToken }, user._id);
 
       resolve(getUserResponse(user, token, refreshToken));
     } catch (err) {
@@ -66,25 +66,18 @@ export const refresh = (refreshToken) => {
   return new Promise(async (resolve, reject) => {
     if (!refreshToken)
       reject(customError(400, 'Please provide the refresh token'));
-    if (!refreshTokens.includes(refreshToken))
-      reject(customError(400, 'Not authorized'));
 
     try {
       const decodedToken = verifyToken(refreshToken, true);
 
-      const newToken = generateAccessToken(
-        decodedToken._id,
-        decodedToken.name,
-        decodedToken.email
+      const user = await User.findOne({ _id: decodedToken._id }).select(
+        '+refreshToken'
       );
+      if (!user) reject(customError(401, 'Invalid user'));
+      if (!user.refreshToken)
+        reject(customError(400, 'Not authorized to refresh'));
 
-      const user = {
-        _doc: {
-          _id: decodedToken._id,
-          name: decodedToken.name,
-          email: decodedToken.email,
-        },
-      };
+      const newToken = generateAccessToken(user._id, user.name, user.email);
 
       resolve(getUserResponse(user, newToken, refreshToken));
     } catch (err) {
@@ -95,8 +88,18 @@ export const refresh = (refreshToken) => {
 
 export const logout = (refreshToken) => {
   return new Promise(async (resolve, reject) => {
+    if (!refreshToken)
+      reject(customError(400, 'Please provide the refresh token'));
+
     try {
-      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+      const decodedToken = verifyToken(refreshToken, true);
+
+      const dbUser = await modifyUser(
+        { $unset: { refreshToken: 1 } },
+        decodedToken._id
+      );
+      if (!dbUser) reject(customError(401, 'Invalid user'));
+
       resolve();
     } catch (err) {
       reject(err);

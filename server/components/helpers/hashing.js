@@ -27,6 +27,7 @@ export const generateAccessToken = (id, name, email, isRefresh = false) =>
 export const getUserResponse = (user, token, refreshToken = '') => {
   const userResponse = { ...user._doc };
   delete userResponse.password;
+  delete userResponse.refreshToken;
 
   return { user: userResponse, token, refreshToken };
 };
