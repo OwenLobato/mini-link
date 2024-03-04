@@ -4,8 +4,11 @@ import {
   compareHash,
   generateAccessToken,
   getUserResponse,
+  verifyToken,
 } from '../helpers/hashing.js';
 import { customError } from '../../network/response.js';
+
+let refreshTokens = []; // TODO: Agregarlo  a BD
 
 export const login = (email, password) => {
   return new Promise(async (resolve, reject) => {
@@ -20,8 +23,15 @@ export const login = (email, password) => {
       if (!passwordMatch) reject(customError(401, 'Invalid credentials'));
 
       const token = generateAccessToken(user._id, user.name, user.email);
+      const refreshToken = generateAccessToken(
+        user._id,
+        user.name,
+        user.email,
+        true
+      );
+      refreshTokens.push(refreshToken);
 
-      resolve(getUserResponse(user, token));
+      resolve(getUserResponse(user, token, refreshToken));
     } catch (err) {
       reject(customError(500, err.message));
     }
@@ -46,6 +56,48 @@ export const register = (name, email, password, confirmPassword) => {
       const token = generateAccessToken(user._id, name, email);
 
       resolve(getUserResponse(user, token));
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+export const refresh = (refreshToken) => {
+  return new Promise(async (resolve, reject) => {
+    if (!refreshToken)
+      reject(customError(400, 'Please provide the refresh token'));
+    if (!refreshTokens.includes(refreshToken))
+      reject(customError(400, 'Not authorized'));
+
+    try {
+      const decodedToken = verifyToken(refreshToken, true);
+
+      const newToken = generateAccessToken(
+        decodedToken._id,
+        decodedToken.name,
+        decodedToken.email
+      );
+
+      const user = {
+        _doc: {
+          _id: decodedToken._id,
+          name: decodedToken.name,
+          email: decodedToken.email,
+        },
+      };
+
+      resolve(getUserResponse(user, newToken, refreshToken));
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+export const logout = (refreshToken) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
+      resolve();
     } catch (err) {
       reject(err);
     }

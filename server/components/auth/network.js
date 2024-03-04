@@ -1,5 +1,5 @@
 import express from 'express';
-import { login, register } from './controller.js';
+import { login, register, refresh, logout } from './controller.js';
 import { success, error } from '../../network/response.js';
 
 export const authRouter = express.Router();
@@ -25,5 +25,29 @@ authRouter.post('/register', (req, res) => {
     })
     .catch((err) => {
       return error(req, res, 500, 'Error registering user', err);
+    });
+});
+
+authRouter.post('/refresh', (req, res) => {
+  const { refreshToken } = req.body;
+
+  refresh(refreshToken)
+    .then((userData) => {
+      return success(req, res, 201, 'Token refresh successfully', userData);
+    })
+    .catch((err) => {
+      return error(req, res, 500, 'Error refreshing token', err);
+    });
+});
+
+authRouter.delete('/logout', (req, res) => {
+  const { refreshToken } = req.body;
+
+  logout(refreshToken)
+    .then((userData) => {
+      return success(req, res, 204, 'Logout successfully', userData);
+    })
+    .catch((err) => {
+      return error(req, res, 500, 'Error on logout', err);
     });
 });

@@ -1,5 +1,5 @@
-import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { verifyToken } from '../components/helpers/hashing.js';
 import { customError } from '../network/response.js';
 import { error } from '../network/response.js';
 
@@ -22,7 +22,7 @@ export const isAuthenticated = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(String(token), process.env.JWT_SECRET_KEY);
+    const decoded = verifyToken(token);
     const user = await User.findById(decoded._id);
     if (!user) {
       error(

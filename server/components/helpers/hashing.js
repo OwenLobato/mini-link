@@ -9,22 +9,30 @@ export const compareHash = (valueToCompare, hashValue) => {
   return bcrypt.compareSync(valueToCompare, hashValue);
 };
 
-export const generateAccessToken = (id, name, email) =>
+export const generateAccessToken = (id, name, email, isRefresh = false) =>
   jwt.sign(
     {
       _id: id,
       name,
       email,
     },
-    process.env.JWT_SECRET_KEY,
+    isRefresh ? process.env.JWT_REFRESH_SECRET_KEY : process.env.JWT_SECRET_KEY,
     {
-      expiresIn: process.env.JWT_EXPIRE_TIME,
+      expiresIn: isRefresh
+        ? process.env.JWT_REFRESH_EXPIRE_TIME
+        : process.env.JWT_EXPIRE_TIME,
     }
   );
 
-export const getUserResponse = (user, token) => {
+export const getUserResponse = (user, token, refreshToken = '') => {
   const userResponse = { ...user._doc };
   delete userResponse.password;
 
-  return { user: userResponse, token };
+  return { user: userResponse, token, refreshToken };
 };
+
+export const verifyToken = (token, isRefresh = false) =>
+  jwt.verify(
+    String(token),
+    isRefresh ? process.env.JWT_REFRESH_SECRET_KEY : process.env.JWT_SECRET_KEY
+  );
