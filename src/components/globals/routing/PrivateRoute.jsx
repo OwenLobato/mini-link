@@ -5,17 +5,30 @@ import { useUserContext } from '../../../contexts/userContext';
 export const PrivateRoute = (props) => {
   const navigate = useNavigate();
 
-  const { getAuthToken, isExpiredAuthToken, removeAuthToken } =
+  const { getAuthToken, getRefreshToken, refreshAuthToken, isExpiredToken } =
     useUserContext();
+
   const authToken = getAuthToken();
-  const isExpired = isExpiredAuthToken();
+  const refreshToken = getRefreshToken();
+
+  const refreshAndProceed = async () => {
+    try {
+      const newToken = await refreshAuthToken();
+      if (!newToken) return navigate('/');
+    } catch (err) {
+      console.log(err);
+      navigate('/');
+      return err;
+    }
+  };
 
   useEffect(() => {
-    if (!authToken || isExpired) {
-      removeAuthToken();
-      navigate('/');
+    if (isExpiredToken(refreshToken)) return navigate('/');
+
+    if (isExpiredToken(authToken)) {
+      refreshAndProceed();
     }
-  }, [authToken]);
+  }, [navigate]);
 
   return <>{authToken && props.children}</>;
 };

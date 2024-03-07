@@ -77,7 +77,13 @@ export const refresh = (refreshToken) => {
       if (!user.refreshToken)
         reject(customError(400, 'Not authorized to refresh'));
 
-      const newToken = generateAccessToken(user._id, user.name, user.email);
+      const decodedDBToken = verifyToken(user.refreshToken, true);
+
+      const newToken = generateAccessToken(
+        decodedDBToken._id,
+        decodedDBToken.name,
+        decodedDBToken.email
+      );
 
       resolve(getUserResponse(user, newToken, refreshToken));
     } catch (err) {
